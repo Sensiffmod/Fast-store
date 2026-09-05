@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Cập nhật meta viewport để khóa zoom, chống vỡ giao diện trên mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Faststore</title>
     <style>
         /* ================= BIẾN MÀU SẮC (LIGHT & DARK MODE) ================= */
@@ -47,10 +48,16 @@
             -webkit-tap-highlight-color: transparent; 
         }
 
+        /* FIX LỖI CHIỀU CAO TRANG WEB */
+        html {
+            height: 100%;
+        }
+
         body {
             background-color: var(--bg-body);
             color: var(--text-main);
-            padding-bottom: 70px;
+            padding-bottom: 75px; /* Khoảng trống cho thanh menu dưới */
+            min-height: 100vh; /* Ép trang web luôn dài bằng 100% màn hình để menu không bị lơ lửng */
             transition: background-color 0.3s, color 0.3s;
         }
 
@@ -85,11 +92,11 @@
         .menu-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px);
-            z-index: 199; display: none; transition: 0.3s;
+            z-index: 1999; display: none; transition: 0.3s;
         }
 
         .side-menu {
-            height: 100%; width: 260px; position: fixed; z-index: 200;
+            height: 100%; width: 260px; position: fixed; z-index: 2000;
             top: 0; left: -260px; background-color: var(--bg-card);
             box-shadow: 4px 0 15px rgba(0,0,0,0.1);
             transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
@@ -233,23 +240,32 @@
         .card-fb .icon-wrap { background: linear-gradient(135deg, #1877f2, #145dbf); }
         .card-tele .icon-wrap { background: linear-gradient(135deg, #0088cc, #0077b3); }
 
-        /* ================= THANH ĐIỀU HƯỚNG DƯỚI CÙNG ================= */
+        /* ================= THANH ĐIỀU HƯỚNG DƯỚI CÙNG FIX LỖI ================= */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background-color: var(--bg-header); display: flex; justify-content: space-around;
-            padding: 10px 0 15px 0; border-top: 1px solid var(--border-main);
-            z-index: 1000; transition: 0.3s;
+            position: fixed; 
+            bottom: 0; /* Neo chặt đáy */
+            left: 0; 
+            right: 0; /* Ép giãn toàn bộ chiều ngang */
+            width: 100%;
+            background-color: var(--bg-header); 
+            display: flex; 
+            justify-content: space-around;
+            padding: 10px 5px 15px 5px; 
+            border-top: 1px solid var(--border-main);
+            z-index: 9999; /* Luôn nổi lên trên cùng */
+            transition: background-color 0.3s, border-color 0.3s; /* Bỏ transition: all để tránh gây bug render cho position fixed */
         }
 
         .nav-item {
-            text-align: center; font-size: 11px; color: var(--text-muted); text-decoration: none;
+            text-align: center; font-size: 10px; /* Thu nhỏ text một chút để fit 5 icon không đè nhau */
+            color: var(--text-muted); text-decoration: none;
             flex: 1; cursor: pointer; font-weight: 600;
             display: flex; flex-direction: column; align-items: center; gap: 4px;
             transition: color 0.3s;
         }
 
         .nav-item svg {
-            width: 24px; height: 24px; fill: none; stroke: currentColor; 
+            width: 22px; height: 22px; fill: none; stroke: currentColor; 
             stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s;
         }
 
@@ -328,7 +344,7 @@
                         <button class="btn-buy" onclick="buyService('Tool AI kéo ref qua màn 2', 'qty1', 3000)">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                             Mua Ngay
-                        </button>
+                      ch</button>
                     </div>
                 </div>
 
@@ -358,7 +374,9 @@
                 <div class="maintenance-msg">Hệ thống bảo trì đến ngày 10/9/2026. Xin vui lòng quay lại sau!</div>
             </div>
         </div>
-    </mainbạn    <!-- TRANG 2: NẠP TIỀN -->
+    </main>
+
+    <!-- TRANG 2: NẠP TIỀN -->
     <main id="page-deposit" class="page">
         <div class="deposit-container">
             <h2>Nạp Tiền</h2>
@@ -368,7 +386,7 @@
                 <img id="qrImage" src="1000001159.jpg" alt="Mã QR" onerror="this.src='1000001159.jpg';">
             </div>
             <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5;">
-                Quét mã QR để thanh toán chính xác số tiền.<br>Tiền duyệt từ 1-3 phút 
+                Quét mã QR để thanh toán chính xác số tiền.<br>Tiền duyệt sau 1-3 phút .
             </p>
         </div>
     </main>
@@ -392,7 +410,6 @@
         <!-- Thẻ Zalo -->
         <div class="support-card card-zalo" onclick="window.open('https://zalo.me/0397208110', '_blank')">
             <div class="icon-wrap">
-                <!-- Chat Bubble (tượng trưng Zalo) -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
             </div>
             <span>Liên hệ Zalo</span>
@@ -401,7 +418,6 @@
         <!-- Thẻ Facebook -->
         <div class="support-card card-fb" onclick="window.open('https://www.facebook.com/share/1FeEPP1Lem/', '_blank')">
             <div class="icon-wrap">
-                <!-- FB SVG -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
             </div>
             <span>Liên hệ Facebook</span>
@@ -410,7 +426,6 @@
         <!-- Thẻ Telegram -->
         <div class="support-card card-tele" onclick="window.open('https://t.me/scloneff', '_blank')">
             <div class="icon-wrap">
-                <!-- Telegram SVG -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </div>
             <span>Liên hệ Telegram</span>
@@ -444,7 +459,6 @@
 
     <script>
         // --- QUẢN LÝ CHẾ ĐỘ TỐI (DARK MODE) TỰ ĐỘNG NHỚ ---
-        // Load lại giao diện nếu bạn đã từng chọn tối
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
@@ -452,7 +466,7 @@
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light'); // Nhớ lại lựa chọn
+            localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
         }
 
         // --- QUẢN LÝ MENU TRƯỢT ---
@@ -547,3 +561,4 @@
     </script>
 </body>
 </html>
+ 
