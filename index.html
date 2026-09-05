@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faststore</title>
     <style>
+        /* RESET & SETUP CƠ BẢN */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            /* Xóa viền/chunk xanh (tap highlight) trên mobile */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         body {
             background-color: #f4f6f9;
-            color: #333;
-            padding-bottom: 70px; /* Chừa khoảng trống cho thanh menu dưới */
+            color: #1e293b;
+            padding-bottom: 70px;
         }
 
-        /* Header */
+        /* ---------------- HEADER ---------------- */
         header {
             display: flex;
             align-items: center;
@@ -29,7 +32,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .header-left {
@@ -38,228 +41,264 @@
         }
 
         .menu-icon {
-            font-size: 24px;
             cursor: pointer;
-            user-select: none;
             padding-right: 15px;
-            color: #555;
+            color: #334155;
+            display: flex;
+            align-items: center;
         }
+        
+        /* Hiệu ứng khi bấm menu */
+        .menu-icon:active svg { transform: scale(0.9); }
 
         .logo {
             font-size: 20px;
-            font-weight: bold;
-            color: #000;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
         }
 
-        /* Ô tiền bên phải */
+        /* Ô hiển thị số dư */
         .balance-box {
-            background-color: #ffebee;
-            border: 1px solid #ffcdd2;
-            padding: 6px 15px;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 14px;
-            font-weight: bold;
-            color: #d32f2f;
+            font-weight: 700;
+            color: #dc2626;
         }
 
-        /* Các trang nội dung */
+        /* ---------------- SIDE MENU (MENU TRƯỢT BÊN TRÁI) ---------------- */
+        .menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.4); backdrop-filter: blur(2px);
+            z-index: 199; display: none; transition: 0.3s;
+        }
+
+        .side-menu {
+            height: 100%; width: 260px; position: fixed; z-index: 200;
+            top: 0; left: -260px; background-color: #fff;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-top: 20px;
+        }
+
+        .menu-header-text {
+            font-size: 18px; font-weight: bold; padding: 0 20px 20px 20px;
+            border-bottom: 1px solid #f1f5f9; color: #0f172a; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .close-btn { font-size: 26px; cursor: pointer; color: #64748b; }
+        
+        .side-menu a {
+            display: flex; align-items: center; gap: 12px; padding: 14px 20px;
+            text-decoration: none; font-size: 15px; font-weight: 500; color: #475569;
+            cursor: pointer; transition: 0.2s;
+        }
+
+        .side-menu a svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
+        
+        .side-menu a:hover, .side-menu a:active {
+            background-color: #f8fafc; color: #2563eb; border-right: 3px solid #2563eb;
+        }
+
+        /* ---------------- CÁC TRANG (SPA ROUTING) ---------------- */
         .page {
-            display: none;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
+            display: none; padding: 20px; max-width: 600px; margin: 0 auto;
         }
-
         .page.active {
-            display: block;
-            animation: fadeIn 0.3s;
+            display: block; animation: fadeIn 0.4s ease forwards;
         }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Khối Sản Phẩm */
+        /* ---------------- GIAO DIỆN SẢN PHẨM ---------------- */
         .section-box {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            background-color: #fff;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 20px;
+            overflow: hidden; background-color: #fff; position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
         /* HIỆU ỨNG ÁNH SÁNG VỤT QUA */
         .section-box::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -150%;
+            content: ""; position: absolute; top: 0; left: -150%;
             width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            animation: shine 4s infinite;
-            pointer-events: none;
-            z-index: 10;
+            transform: skewX(-25deg); animation: shine 5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none; z-index: 10;
         }
 
         @keyframes shine {
-            0% { left: -150%; }
-            20% { left: 200%; }
-            100% { left: 200%; }
+            0% { left: -150%; } 20% { left: 200%; } 100% { left: 200%; }
         }
 
         .section-header {
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #fff;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 16px; font-size: 16px; font-weight: 700; background-color: #fff;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
         }
 
-        .section-header:hover {
-            background-color: #f0f0f0;
-        }
+        .section-header:active { background-color: #f8fafc; }
 
         .section-content {
-            display: none;
-            padding: 15px;
-            background-color: #fcfcfc;
-            border-top: 1px solid #eee;
-            position: relative;
-            z-index: 20;
+            display: none; padding: 15px; background-color: #f8fafc;
+            border-top: 1px solid #f1f5f9; position: relative; z-index: 20;
         }
 
         .option-box {
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            background-color: #fff;
+            border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px;
+            background-color: #fff; transition: 0.3s;
         }
 
         .option-header {
-            padding: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            color: #2c3e50;
+            padding: 15px; font-weight: 600; cursor: pointer; color: #1e293b;
         }
 
         .option-body {
-            display: none;
-            padding: 15px;
-            border-top: 1px dashed #ccc;
-            background-color: #fafafa;
+            display: none; padding: 15px; border-top: 1px dashed #cbd5e1; background-color: #fff;
         }
 
+        /* ---------------- INPUT & BUTTON (HIỆU ỨNG ĐẸP) ---------------- */
         .input-group label {
-            display: block; font-size: 14px; margin-bottom: 8px; color: #555;
+            display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #64748b;
         }
 
         .input-group input {
-            width: 100%; padding: 10px; font-size: 16px; border: 1px solid #bbb; border-radius: 4px; outline: none;
+            width: 100%; padding: 12px; font-size: 15px; 
+            border: 1.5px solid #cbd5e1; border-radius: 6px; 
+            outline: none; transition: all 0.3s ease;
         }
 
-        .input-group input:focus { border-color: #007bff; }
-
-        .total-price {
-            font-size: 16px; font-weight: bold; color: #d32f2f; margin-top: 10px; margin-bottom: 10px;
+        .input-group input:focus { 
+            border-color: #3b82f6; 
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); 
         }
 
-        /* Nút Mua Ngay */
+        .total-price { font-size: 16px; font-weight: 700; color: #ef4444; margin: 12px 0; }
+
         .btn-buy {
-            width: 100%;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
+            width: 100%; background-color: #2563eb; color: white; border: none; outline: none;
+            padding: 14px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
 
-        .btn-buy:hover { background-color: #0056b3; }
+        .btn-buy:hover { background-color: #1d4ed8; }
+        .btn-buy:active { 
+            transform: scale(0.97); /* Hiệu ứng nhún mượt */
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); 
+        }
 
-        /* Trang Nạp Tiền */
+        /* ---------------- TRANG NẠP TIỀN ---------------- */
         .deposit-container {
-            background: #fff; padding: 25px 20px; border-radius: 12px;
-            text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #fff; padding: 30px 20px; border-radius: 12px;
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0;
         }
         
-        .deposit-container h2 { margin-bottom: 10px; color: #2c3e50; }
-        .deposit-container p.note { color: #d32f2f; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+        .deposit-container h2 { margin-bottom: 8px; color: #0f172a; font-size: 20px; }
+        .deposit-container p.note { color: #ef4444; font-size: 14px; font-weight: 600; margin-bottom: 20px; }
         
         .deposit-container input {
-            width: 100%; padding: 12px; font-size: 18px; border: 2px solid #007bff; border-radius: 6px;
-            margin-bottom: 20px; text-align: center; font-weight: bold;
+            width: 100%; padding: 14px; font-size: 18px; border: 2px solid #e2e8f0; border-radius: 8px;
+            margin-bottom: 20px; text-align: center; font-weight: 700; outline: none; transition: 0.3s;
+            color: #1e293b;
+        }
+
+        .deposit-container input:focus {
+            border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
         }
 
         .qr-container {
-            border: 2px dashed #ccc; border-radius: 8px; padding: 10px; display: inline-block; margin-bottom: 15px; background: #fff;
+            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 12px; display: inline-block; margin-bottom: 15px; background: #fff;
         }
         
-        .qr-container img { width: 100%; max-width: 250px; border-radius: 5px; }
+        .qr-container img { width: 100%; max-width: 220px; border-radius: 8px; }
 
-        .btn-test-deposit {
-            background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%;
-        }
-
-        /* Trang Lịch sử */
-        .history-list {
-            list-style: none; padding: 0;
-        }
+        /* ---------------- TRANG LỊCH SỬ ---------------- */
+        .history-list { list-style: none; padding: 0; }
         .history-item {
-            background: #fff; border-left: 4px solid #28a745; padding: 15px; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: #fff; border-left: 4px solid #10b981; padding: 16px; border-radius: 8px; margin-bottom: 12px; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03); border-right: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;
         }
-        .history-item h4 { margin-bottom: 5px; color: #333; }
-        .history-item p { font-size: 14px; color: #666; margin-bottom: 3px; }
-        .history-item .price { font-weight: bold; color: #d32f2f; }
+        .history-item h4 { margin-bottom: 6px; color: #1e293b; font-size: 15px; }
+        .history-item p { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+        .history-item .price { font-weight: 700; color: #ef4444; margin-top: 4px; font-size: 14px; }
+        .empty-msg { text-align: center; color: #94a3b8; margin-top: 30px; font-weight: 500; font-size: 15px; }
 
-        .empty-msg { text-align: center; color: #888; margin-top: 20px; }
-
-        /* Menu dưới cùng (Bottom Navigation) */
+        /* ---------------- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (BOTTOM NAV CHUYÊN NGHIỆP) ---------------- */
         .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background-color: #fff;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: #fff; display: flex; justify-content: space-around;
+            padding: 10px 0 15px 0; /* Padding dưới để tránh chạm viền đt */
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.04); z-index: 1000; border-top: 1px solid #f1f5f9;
         }
 
         .nav-item {
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-            text-decoration: none;
-            flex: 1;
-            cursor: pointer;
-            font-weight: 500;
+            text-align: center; font-size: 11px; color: #94a3b8; text-decoration: none;
+            flex: 1; cursor: pointer; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            transition: color 0.3s; outline: none;
         }
 
-        .nav-item.active { color: #007bff; }
-        .nav-item .icon { font-size: 20px; margin-bottom: 4px; display: block; }
+        /* SVG Icons chuẩn chỉnh */
+        .nav-item svg {
+            width: 24px; height: 24px; fill: none; stroke: currentColor; 
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s;
+        }
+
+        .nav-item.active { color: #2563eb; }
+        .nav-item.active svg { transform: translateY(-2px); }
 
         /* Khác */
-        .maintenance-msg { color: #d32f2f; font-weight: 500; text-align: center; padding: 10px; background-color: #ffebee; border-radius: 4px; border: 1px solid #ffcdd2; }
+        .maintenance-msg { color: #b45309; font-weight: 500; text-align: center; padding: 12px; background-color: #fef3c7; border-radius: 6px; border: 1px solid #fde68a; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-left">
+            <!-- Nút menu SVG -->
+            <div class="menu-icon" onclick="toggleMenu()">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </div>
             <div class="logo">Faststore</div>
         </div>
         <!-- Ô hiển thị số dư -->
         <div class="balance-box" id="balanceDisplay">Số dư: 0đ</div>
     </header>
+
+    <!-- MENU TRƯỢT BÊN TRÁI -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header-text">
+            <span>Menu Faststore</span>
+            <span class="close-btn" onclick="toggleMenu()">&times;</span>
+        </div>
+        
+        <a onclick="switchPage('home'); toggleMenu()">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Trang chủ
+        </a>
+        <a onclick="switchPage('deposit'); toggleMenu()">
+            <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            Nạp tiền
+        </a>
+        <a onclick="switchPage('history'); toggleMenu()">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Lịch sử
+        </a>
+        <a href="https://zalo.me/0397208110" target="_blank" onclick="toggleMenu()">
+            <svg viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            Liên hệ Admin
+        </a>
+    </div>
 
     <!-- TRANG 1: TRANG CHỦ (SẢN PHẨM) -->
     <main id="page-home" class="page active">
@@ -278,12 +317,15 @@
                     </div>
                     <div class="option-body" id="opt1-content">
                         <div class="input-group">
-                            <label>Nhập số lượng ref muốn kéo (Giá: 3.000đ / 1 ref):</label>
+                            <label>Nhập số lượng ref (Giá: 3.000đ / 1 ref):</label>
                             <input type="number" id="qty1" min="1" placeholder="Ví dụ: 10" oninput="calculatePrice('qty1', 3000, 'total1')">
                         </div>
                         <div class="total-price">Thành tiền: <span id="total1">0</span> VNĐ</div>
-                        <!-- Nút Mua -->
-                        <button class="btn-buy" onclick="buyService('Tool AI kéo ref qua màn 2', 'qty1', 3000)">🛒 Mua Ngay</button>
+                        <button class="btn-buy" onclick="buyService('Tool AI kéo ref qua màn 2', 'qty1', 3000)">
+                            <!-- Giỏ hàng icon -->
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            Mua Ngay
+                        </button>
                     </div>
                 </div>
 
@@ -294,12 +336,14 @@
                     </div>
                     <div class="option-body" id="opt2-content">
                         <div class="input-group">
-                            <label>Nhập số lượng ref muốn kéo (Giá: 1.200đ / 1 ref):</label>
+                            <label>Nhập số lượng ref (Giá: 1.200đ / 1 ref):</label>
                             <input type="number" id="qty2" min="1" placeholder="Ví dụ: 20" oninput="calculatePrice('qty2', 1200, 'total2')">
                         </div>
                         <div class="total-price">Thành tiền: <span id="total2">0</span> VNĐ</div>
-                        <!-- Nút Mua -->
-                        <button class="btn-buy" onclick="buyService('Tool AI kéo ref nhập mã mời', 'qty2', 1200)">🛒 Mua Ngay</button>
+                        <button class="btn-buy" onclick="buyService('Tool AI kéo ref nhập mã mời', 'qty2', 1200)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            Mua Ngay
+                        </button>
                     </div>
                 </div>
 
@@ -323,27 +367,29 @@
     <!-- TRANG 2: NẠP TIỀN -->
     <main id="page-deposit" class="page">
         <div class="deposit-container">
-            <h2>Nạp Tiền Vào Tài Khoản</h2>
+            <h2>Nạp Tiền</h2>
             <p class="note">Nạp tối thiểu 2.000đ</p>
             
-            <input type="number" id="depositAmount" min="2000" placeholder="Ví dụ: 20000" oninput="updateQR()">
+            <input type="number" id="depositAmount" min="2000" placeholder="Nhập số tiền..." oninput="updateQR()">
             
             <div class="qr-container">
-                <!-- Mã QR mặc định lấy file của bạn, có onerror để tránh bị lỗi icon -->
-                <img id="qrImage" src="1000001159.jpg" alt="Mã QR Thanh Toán" onerror="this.src='1000001159.jpg';">
+                <img id="qrImage" src="1000001159.jpg" alt="Mã QR" onerror="this.src='1000001159.jpg';">
             </div>
-            <p style="font-size: 13px; color: #555;">Quét mã QR để thanh toán tự động hoặc chuyển khoản với nội dung như trên.</p>
-            
-            <!-- Nút giả lập để test hệ thống -->
-            <button class="btn-test-deposit" onclick="testDeposit()">Chấp nhận (Nút Test Cộng Tiền Ảo)</button>
+            <p style="font-size: 13.5px; color: #475569; line-height: 1.5;">
+                Quét mã QR để thanh toán chính xác số tiền.<br>
+                Admin sẽ duyệt cộng tay cho bạn ngay sau khi nhận được.
+            </p>
         </div>
     </main>
 
     <!-- TRANG 3: LỊCH SỬ MUA HÀNG -->
     <main id="page-history" class="page">
-        <h2 style="margin-bottom: 15px; color: #2c3e50;">Lịch sử mua hàng</h2>
+        <h2 style="margin-bottom: 15px; color: #0f172a; font-size: 20px;">Lịch sử giao dịch</h2>
         <div id="history-container">
-            <div class="empty-msg" id="emptyHistory">Bạn chưa có giao dịch nào.</div>
+            <div class="empty-msg" id="emptyHistory">
+                <svg style="margin: 0 auto 10px auto; display: block; color: #cbd5e1;" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Bạn chưa có giao dịch nào
+            </div>
             <ul class="history-list" id="historyList"></ul>
         </div>
     </main>
@@ -351,22 +397,43 @@
     <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (BOTTOM NAV) -->
     <nav class="bottom-nav">
         <a class="nav-item active" id="nav-home" onclick="switchPage('home')">
-            <span class="icon">🏠</span>Trang chủ
+            <!-- Icon Home SVG -->
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Trang chủ
         </a>
         <a class="nav-item" id="nav-deposit" onclick="switchPage('deposit')">
-            <span class="icon">💰</span>Nạp tiền
+            <!-- Icon Wallet/Card SVG -->
+            <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            Nạp tiền
         </a>
         <a class="nav-item" id="nav-history" onclick="switchPage('history')">
-            <span class="icon">📜</span>Lịch sử
+            <!-- Icon Receipt/History SVG -->
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Lịch sử
         </a>
         <a class="nav-item" href="https://zalo.me/0397208110" target="_blank">
-            <span class="icon">📞</span>Liên hệ Admin
+            <!-- Icon Headphone/Support SVG -->
+            <svg viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            Hỗ trợ
         </a>
     </nav>
 
     <script>
+        // --- QUẢN LÝ MENU TRƯỢT ---
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.style.left === '0px') {
+                menu.style.left = '-260px';
+                overlay.style.display = 'none';
+            } else {
+                menu.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+
         // --- QUẢN LÝ SỐ DƯ & TRẠNG THÁI ---
-        let currentBalance = 0; // Số dư mặc định
+        let currentBalance = 0; // Để test báo lỗi hết tiền (bạn tự chỉnh DB ở Backend)
 
         function updateBalanceUI() {
             document.getElementById('balanceDisplay').innerText = `Số dư: ${currentBalance.toLocaleString('vi-VN')}đ`;
@@ -374,19 +441,14 @@
 
         // --- ĐIỀU HƯỚNG TRANG (SPA ROUTING) ---
         function switchPage(pageName) {
-            // Ẩn tất cả trang
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            // Reset màu các nút bottom nav
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
 
-            // Hiển thị trang mục tiêu
             document.getElementById(`page-${pageName}`).classList.add('active');
-            
-            // Đổi màu nút nav tương ứng (nếu có id)
             let navBtn = document.getElementById(`nav-${pageName}`);
             if(navBtn) navBtn.classList.add('active');
             
-            window.scrollTo(0, 0); // Kéo lên đầu trang
+            window.scrollTo(0, 0); 
         }
 
         // --- MUA SẢN PHẨM ---
@@ -401,28 +463,20 @@
 
             let totalCost = quantity * pricePerUnit;
 
-            // KIỂM TRA SỐ DƯ
             if (currentBalance >= totalCost) {
-                // Trừ tiền
                 currentBalance -= totalCost;
                 updateBalanceUI();
-                
-                // Lưu vào lịch sử
                 addToHistory(serviceName, quantity, totalCost);
-
-                alert(`Thanh toán thành công!\nBạn đã mua ${quantity} ref với giá ${totalCost.toLocaleString('vi-VN')}đ.`);
-                
-                // Chuyển tới tab lịch sử để xem luôn
+                alert(`Thanh toán thành công!\nĐã mua ${quantity} ref với giá ${totalCost.toLocaleString('vi-VN')}đ.`);
                 switchPage('history');
             } else {
-                // Thất bại do thiếu tiền
-                alert(`Thanh toán thất bại!\nSố dư không đủ. Cần ${totalCost.toLocaleString('vi-VN')}đ nhưng bạn chỉ có ${currentBalance.toLocaleString('vi-VN')}đ.\nVui lòng nạp thêm tiền!`);
+                alert(`Thanh toán thất bại!\nSố dư không đủ. Bạn cần ${totalCost.toLocaleString('vi-VN')}đ.\nVui lòng chuyển qua mục nạp tiền.`);
             }
         }
 
         // --- LƯU LỊCH SỬ ---
         function addToHistory(name, qty, cost) {
-            document.getElementById('emptyHistory').style.display = 'none'; // Ẩn chữ "chưa có giao dịch"
+            document.getElementById('emptyHistory').style.display = 'none';
             
             let list = document.getElementById('historyList');
             let now = new Date();
@@ -436,8 +490,6 @@
                 <p>Thời gian: ${timeStr}</p>
                 <p class="price">- ${cost.toLocaleString('vi-VN')} đ</p>
             `;
-            
-            // Thêm lên đầu danh sách
             list.insertBefore(li, list.firstChild);
         }
 
@@ -447,26 +499,9 @@
             const qrImage = document.getElementById('qrImage');
             
             if (amount && parseInt(amount) >= 2000) {
-                // Cập nhật mã QR thật thông qua VietQR
                 qrImage.src = `https://img.vietqr.io/image/mbbank-0397208110-compact2.png?amount=${amount}&addInfo=Nap%20tien%20Faststore`;
             } else {
-                // Khôi phục ảnh mặc định nếu chưa đủ 2k
                 qrImage.src = "1000001159.jpg";
-            }
-        }
-
-        // (Chức năng ẩn) Để bạn tự test nạp tiền 
-        function testDeposit() {
-            const amount = parseInt(document.getElementById('depositAmount').value);
-            if (amount >= 2000) {
-                currentBalance += amount;
-                updateBalanceUI();
-                alert(`Đã cộng ảo ${amount.toLocaleString('vi-VN')}đ vào số dư để bạn test mua hàng!`);
-                document.getElementById('depositAmount').value = '';
-                updateQR();
-                switchPage('home'); // Về trang chủ mua thử
-            } else {
-                alert("Vui lòng nhập số tiền từ 2.000đ trở lên!");
             }
         }
 
@@ -489,7 +524,6 @@
             totalElement.innerText = total.toLocaleString('vi-VN');
         }
 
-        // Khởi tạo
         updateBalanceUI();
     </script>
 </body>
