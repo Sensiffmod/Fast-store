@@ -13,21 +13,23 @@
         }
 
         body {
-            background-color: #ffffff;
+            background-color: #f4f6f9;
             color: #333;
+            padding-bottom: 70px; /* Chừa khoảng trống cho thanh menu dưới */
         }
 
         /* Header */
         header {
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Đẩy nội dung ra 2 bên */
+            justify-content: space-between;
             padding: 15px 20px;
             background-color: #fff;
             border-bottom: 1px solid #eaeaea;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .header-left {
@@ -51,8 +53,8 @@
 
         /* Ô tiền bên phải */
         .balance-box {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
             padding: 6px 15px;
             border-radius: 20px;
             font-size: 14px;
@@ -60,136 +62,33 @@
             color: #d32f2f;
         }
 
-        /* Side Menu */
-        .menu-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 199;
+        /* Các trang nội dung */
+        .page {
             display: none;
-        }
-
-        .side-menu {
-            height: 100%;
-            width: 250px;
-            position: fixed;
-            z-index: 200;
-            top: 0; left: -250px;
-            background-color: #fff;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-            transition: 0.3s;
-            padding-top: 60px;
-        }
-
-        .side-menu a {
-            padding: 15px 20px;
-            text-decoration: none;
-            font-size: 16px;
-            color: #333;
-            display: block;
-            border-bottom: 1px solid #f1f1f1;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .side-menu a:hover {
-            background-color: #f9f9f9;
-            color: #007bff;
-        }
-
-        .side-menu .close-btn {
-            position: absolute;
-            top: 10px; right: 15px;
-            font-size: 28px;
-            border-bottom: none;
-            padding: 0;
-        }
-
-        /* Modal Nạp tiền */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            z-index: 300;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 25px 20px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px; right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #888;
-        }
-
-        .modal-content h2 {
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-
-        .modal-content p.note {
-            color: #d32f2f;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            outline: none;
-            text-align: center;
-        }
-        
-        .modal-content input:focus {
-            border-color: #007bff;
-        }
-
-        .qr-container {
-            border: 2px dashed #007bff;
-            border-radius: 8px;
-            padding: 10px;
-            display: inline-block;
-        }
-
-        .qr-container img {
-            width: 100%;
-            max-width: 220px;
-            border-radius: 5px;
-        }
-
-        /* Main Content */
-        main {
             padding: 20px;
             max-width: 600px;
             margin: 0 auto;
         }
 
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Khối Sản Phẩm */
         .section-box {
             border: 1px solid #ddd;
             border-radius: 8px;
             margin-bottom: 15px;
             overflow: hidden;
-            background-color: #f9f9f9;
-            position: relative; /* Hỗ trợ hiệu ứng ánh sáng */
+            background-color: #fff;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         /* HIỆU ỨNG ÁNH SÁNG VỤT QUA */
@@ -198,10 +97,10 @@
             position: absolute;
             top: 0; left: -150%;
             width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
             transform: skewX(-25deg);
-            animation: shine 4s infinite; /* 4s lặp lại 1 lần */
-            pointer-events: none; /* Không chặn click chuột vào nội dung dưới */
+            animation: shine 4s infinite;
+            pointer-events: none;
             z-index: 10;
         }
 
@@ -232,20 +131,14 @@
             background-color: #fcfcfc;
             border-top: 1px solid #eee;
             position: relative;
-            z-index: 20; /* Nằm trên hiệu ứng ánh sáng nếu mở nội dung */
+            z-index: 20;
         }
 
-        /* Options inside Section 1 */
         .option-box {
             border: 1px solid #ccc;
             border-radius: 6px;
             margin-bottom: 15px;
             background-color: #fff;
-            overflow: hidden;
-        }
-
-        .option-box:last-child {
-            margin-bottom: 0;
         }
 
         .option-header {
@@ -255,10 +148,6 @@
             color: #2c3e50;
         }
 
-        .option-header:hover {
-            background-color: #f5f5f5;
-        }
-
         .option-body {
             display: none;
             padding: 15px;
@@ -266,98 +155,114 @@
             background-color: #fafafa;
         }
 
-        .input-group {
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-        }
-
         .input-group label {
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #555;
+            display: block; font-size: 14px; margin-bottom: 8px; color: #555;
         }
 
         .input-group input {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #bbb;
-            border-radius: 4px;
-            outline: none;
+            width: 100%; padding: 10px; font-size: 16px; border: 1px solid #bbb; border-radius: 4px; outline: none;
         }
 
-        .input-group input:focus {
-            border-color: #007bff;
-        }
+        .input-group input:focus { border-color: #007bff; }
 
         .total-price {
+            font-size: 16px; font-weight: bold; color: #d32f2f; margin-top: 10px; margin-bottom: 10px;
+        }
+
+        /* Nút Mua Ngay */
+        .btn-buy {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
             font-size: 16px;
             font-weight: bold;
-            color: #d32f2f;
-            margin-top: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        /* Thông báo bảo trì */
-        .maintenance-msg {
-            color: #d32f2f;
-            font-weight: 500;
-            text-align: center;
-            padding: 10px;
-            background-color: #ffebee;
-            border-radius: 4px;
-            border: 1px solid #ffcdd2;
+        .btn-buy:hover { background-color: #0056b3; }
+
+        /* Trang Nạp Tiền */
+        .deposit-container {
+            background: #fff; padding: 25px 20px; border-radius: 12px;
+            text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .deposit-container h2 { margin-bottom: 10px; color: #2c3e50; }
+        .deposit-container p.note { color: #d32f2f; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+        
+        .deposit-container input {
+            width: 100%; padding: 12px; font-size: 18px; border: 2px solid #007bff; border-radius: 6px;
+            margin-bottom: 20px; text-align: center; font-weight: bold;
         }
 
-        /* Footer Credit */
-        footer {
+        .qr-container {
+            border: 2px dashed #ccc; border-radius: 8px; padding: 10px; display: inline-block; margin-bottom: 15px; background: #fff;
+        }
+        
+        .qr-container img { width: 100%; max-width: 250px; border-radius: 5px; }
+
+        .btn-test-deposit {
+            background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%;
+        }
+
+        /* Trang Lịch sử */
+        .history-list {
+            list-style: none; padding: 0;
+        }
+        .history-item {
+            background: #fff; border-left: 4px solid #28a745; padding: 15px; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .history-item h4 { margin-bottom: 5px; color: #333; }
+        .history-item p { font-size: 14px; color: #666; margin-bottom: 3px; }
+        .history-item .price { font-weight: bold; color: #d32f2f; }
+
+        .empty-msg { text-align: center; color: #888; margin-top: 20px; }
+
+        /* Menu dưới cùng (Bottom Navigation) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
             text-align: center;
-            padding: 20px;
             font-size: 12px;
-            color: #aaa;
-            margin-top: 40px;
+            color: #666;
+            text-decoration: none;
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
         }
+
+        .nav-item.active { color: #007bff; }
+        .nav-item .icon { font-size: 20px; margin-bottom: 4px; display: block; }
+
+        /* Khác */
+        .maintenance-msg { color: #d32f2f; font-weight: 500; text-align: center; padding: 10px; background-color: #ffebee; border-radius: 4px; border: 1px solid #ffcdd2; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-left">
-            <!-- Nút menu 3 gạch ngang -->
-            <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
             <div class="logo">Faststore</div>
         </div>
-        <!-- Ô tiền bên phải -->
-        <div class="balance-box">Số dư: 0đ</div>
+        <!-- Ô hiển thị số dư -->
+        <div class="balance-box" id="balanceDisplay">Số dư: 0đ</div>
     </header>
 
-    <!-- Side Menu Overlay -->
-    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-
-    <!-- Side Menu -->
-    <div class="side-menu" id="sideMenu">
-        <a class="close-btn" onclick="toggleMenu()">&times;</a>
-        <!-- Mục 1: Nạp tiền -->
-        <a onclick="openDepositModal()">💰 Nạp tiền</a>
-        <!-- Mục 2: Liên hệ admin -->
-        <a href="https://zalo.me/0397208110" target="_blank">📞 Liên hệ admin</a>
-    </div>
-
-    <!-- Modal Nạp Tiền -->
-    <div class="modal-overlay" id="depositModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeDepositModal()">&times;</span>
-            <h2>Nạp Tiền</h2>
-            <p class="note">Nạp tối thiểu 2.000đ</p>
-            <input type="number" id="depositAmount" min="2000" placeholder="Nhập số tiền muốn nạp..." oninput="updateQR()">
-            <div class="qr-container">
-                <!-- Mã QR mặc định lấy từ file của bạn -->
-                <img id="qrImage" src="1000001159.jpg" alt="QR Nạp Tiền">
-            </div>
-            <p style="font-size: 12px; color: #888; margin-top: 10px;">Quét mã QR để thanh toán tự động.</p>
-        </div>
-    </div>
-
-    <main>
+    <!-- TRANG 1: TRANG CHỦ (SẢN PHẨM) -->
+    <main id="page-home" class="page active">
         <!-- Phần 1: Tool Kéo Ref Spin Dreams -->
         <div class="section-box">
             <div class="section-header" onclick="toggleDisplay('sec1-content')">
@@ -366,7 +271,7 @@
             </div>
             <div class="section-content" id="sec1-content">
                 
-                <!-- Ô 1 -->
+                <!-- Ô Sản phẩm 1 -->
                 <div class="option-box">
                     <div class="option-header" onclick="toggleDisplay('opt1-content')">
                         Tool AI kéo ref qua màn 2
@@ -377,13 +282,15 @@
                             <input type="number" id="qty1" min="1" placeholder="Ví dụ: 10" oninput="calculatePrice('qty1', 3000, 'total1')">
                         </div>
                         <div class="total-price">Thành tiền: <span id="total1">0</span> VNĐ</div>
+                        <!-- Nút Mua -->
+                        <button class="btn-buy" onclick="buyService('Tool AI kéo ref qua màn 2', 'qty1', 3000)">🛒 Mua Ngay</button>
                     </div>
                 </div>
 
-                <!-- Ô 2 -->
+                <!-- Ô Sản phẩm 2 -->
                 <div class="option-box">
                     <div class="option-header" onclick="toggleDisplay('opt2-content')">
-                        Tool AI kéo ref thành viên chỉ nhập mã mời không làm gì thêm
+                        Tool AI kéo ref thành viên chỉ nhập mã mời
                     </div>
                     <div class="option-body" id="opt2-content">
                         <div class="input-group">
@@ -391,6 +298,8 @@
                             <input type="number" id="qty2" min="1" placeholder="Ví dụ: 20" oninput="calculatePrice('qty2', 1200, 'total2')">
                         </div>
                         <div class="total-price">Thành tiền: <span id="total2">0</span> VNĐ</div>
+                        <!-- Nút Mua -->
+                        <button class="btn-buy" onclick="buyService('Tool AI kéo ref nhập mã mời', 'qty2', 1200)">🛒 Mua Ngay</button>
                     </div>
                 </div>
 
@@ -409,55 +318,159 @@
                 </div>
             </div>
         </div>
-
     </main>
 
-    <footer>
-        &copy; 2026 Faststore. Dev by sensiob53.
-    </footer>
+    <!-- TRANG 2: NẠP TIỀN -->
+    <main id="page-deposit" class="page">
+        <div class="deposit-container">
+            <h2>Nạp Tiền Vào Tài Khoản</h2>
+            <p class="note">Nạp tối thiểu 2.000đ</p>
+            
+            <input type="number" id="depositAmount" min="2000" placeholder="Ví dụ: 20000" oninput="updateQR()">
+            
+            <div class="qr-container">
+                <!-- Mã QR mặc định lấy file của bạn, có onerror để tránh bị lỗi icon -->
+                <img id="qrImage" src="1000001159.jpg" alt="Mã QR Thanh Toán" onerror="this.src='1000001159.jpg';">
+            </div>
+            <p style="font-size: 13px; color: #555;">Quét mã QR để thanh toán tự động hoặc chuyển khoản với nội dung như trên.</p>
+            
+            <!-- Nút giả lập để test hệ thống -->
+            <button class="btn-test-deposit" onclick="testDeposit()">Chấp nhận (Nút Test Cộng Tiền Ảo)</button>
+        </div>
+    </main>
+
+    <!-- TRANG 3: LỊCH SỬ MUA HÀNG -->
+    <main id="page-history" class="page">
+        <h2 style="margin-bottom: 15px; color: #2c3e50;">Lịch sử mua hàng</h2>
+        <div id="history-container">
+            <div class="empty-msg" id="emptyHistory">Bạn chưa có giao dịch nào.</div>
+            <ul class="history-list" id="historyList"></ul>
+        </div>
+    </main>
+
+    <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (BOTTOM NAV) -->
+    <nav class="bottom-nav">
+        <a class="nav-item active" id="nav-home" onclick="switchPage('home')">
+            <span class="icon">🏠</span>Trang chủ
+        </a>
+        <a class="nav-item" id="nav-deposit" onclick="switchPage('deposit')">
+            <span class="icon">💰</span>Nạp tiền
+        </a>
+        <a class="nav-item" id="nav-history" onclick="switchPage('history')">
+            <span class="icon">📜</span>Lịch sử
+        </a>
+        <a class="nav-item" href="https://zalo.me/0397208110" target="_blank">
+            <span class="icon">📞</span>Liên hệ Admin
+        </a>
+    </nav>
 
     <script>
-        // Mở / Đóng Menu
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('menuOverlay');
-            if (menu.style.left === '0px') {
-                menu.style.left = '-250px';
-                overlay.style.display = 'none';
+        // --- QUẢN LÝ SỐ DƯ & TRẠNG THÁI ---
+        let currentBalance = 0; // Số dư mặc định
+
+        function updateBalanceUI() {
+            document.getElementById('balanceDisplay').innerText = `Số dư: ${currentBalance.toLocaleString('vi-VN')}đ`;
+        }
+
+        // --- ĐIỀU HƯỚNG TRANG (SPA ROUTING) ---
+        function switchPage(pageName) {
+            // Ẩn tất cả trang
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            // Reset màu các nút bottom nav
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+            // Hiển thị trang mục tiêu
+            document.getElementById(`page-${pageName}`).classList.add('active');
+            
+            // Đổi màu nút nav tương ứng (nếu có id)
+            let navBtn = document.getElementById(`nav-${pageName}`);
+            if(navBtn) navBtn.classList.add('active');
+            
+            window.scrollTo(0, 0); // Kéo lên đầu trang
+        }
+
+        // --- MUA SẢN PHẨM ---
+        function buyService(serviceName, inputId, pricePerUnit) {
+            const qtyInput = document.getElementById(inputId).value;
+            let quantity = parseInt(qtyInput);
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert("Vui lòng nhập số lượng hợp lệ!");
+                return;
+            }
+
+            let totalCost = quantity * pricePerUnit;
+
+            // KIỂM TRA SỐ DƯ
+            if (currentBalance >= totalCost) {
+                // Trừ tiền
+                currentBalance -= totalCost;
+                updateBalanceUI();
+                
+                // Lưu vào lịch sử
+                addToHistory(serviceName, quantity, totalCost);
+
+                alert(`Thanh toán thành công!\nBạn đã mua ${quantity} ref với giá ${totalCost.toLocaleString('vi-VN')}đ.`);
+                
+                // Chuyển tới tab lịch sử để xem luôn
+                switchPage('history');
             } else {
-                menu.style.left = '0px';
-                overlay.style.display = 'block';
+                // Thất bại do thiếu tiền
+                alert(`Thanh toán thất bại!\nSố dư không đủ. Cần ${totalCost.toLocaleString('vi-VN')}đ nhưng bạn chỉ có ${currentBalance.toLocaleString('vi-VN')}đ.\nVui lòng nạp thêm tiền!`);
             }
         }
 
-        // Mở Modal Nạp Tiền
-        function openDepositModal() {
-            toggleMenu(); // Đóng menu lại khi mở modal lên
-            document.getElementById('depositModal').style.display = 'flex';
+        // --- LƯU LỊCH SỬ ---
+        function addToHistory(name, qty, cost) {
+            document.getElementById('emptyHistory').style.display = 'none'; // Ẩn chữ "chưa có giao dịch"
+            
+            let list = document.getElementById('historyList');
+            let now = new Date();
+            let timeStr = `${now.getHours()}:${now.getMinutes()} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+
+            let li = document.createElement('li');
+            li.className = 'history-item';
+            li.innerHTML = `
+                <h4>${name}</h4>
+                <p>Số lượng: <b>${qty}</b> ref</p>
+                <p>Thời gian: ${timeStr}</p>
+                <p class="price">- ${cost.toLocaleString('vi-VN')} đ</p>
+            `;
+            
+            // Thêm lên đầu danh sách
+            list.insertBefore(li, list.firstChild);
         }
 
-        // Đóng Modal Nạp Tiền
-        function closeDepositModal() {
-            document.getElementById('depositModal').style.display = 'none';
-        }
-
-        // Cập nhật QR tự động theo số tiền
+        // --- NẠP TIỀN & MÃ QR ---
         function updateQR() {
             const amount = document.getElementById('depositAmount').value;
             const qrImage = document.getElementById('qrImage');
             
-            // Nếu người dùng nhập từ 2k trở lên thì tạo QR API Động
             if (amount && parseInt(amount) >= 2000) {
-                // Đang cấu hình ngân hàng MBBank, số TK: 0397208110 theo số Zalo của bạn.
-                // Nếu khác bạn có thể thay "mbbank" thành mã ngân hàng khác, và "0397208110" thành STK của bạn
+                // Cập nhật mã QR thật thông qua VietQR
                 qrImage.src = `https://img.vietqr.io/image/mbbank-0397208110-compact2.png?amount=${amount}&addInfo=Nap%20tien%20Faststore`;
             } else {
-                // Nếu xóa hoặc chưa đủ tiền thì dùng ảnh mặc định ban đầu
+                // Khôi phục ảnh mặc định nếu chưa đủ 2k
                 qrImage.src = "1000001159.jpg";
             }
         }
 
-        // Hàm dùng để đóng/mở nội dung các phần
+        // (Chức năng ẩn) Để bạn tự test nạp tiền 
+        function testDeposit() {
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            if (amount >= 2000) {
+                currentBalance += amount;
+                updateBalanceUI();
+                alert(`Đã cộng ảo ${amount.toLocaleString('vi-VN')}đ vào số dư để bạn test mua hàng!`);
+                document.getElementById('depositAmount').value = '';
+                updateQR();
+                switchPage('home'); // Về trang chủ mua thử
+            } else {
+                alert("Vui lòng nhập số tiền từ 2.000đ trở lên!");
+            }
+        }
+
+        // --- HIỂN THỊ UI KHÁC ---
         function toggleDisplay(elementId) {
             const element = document.getElementById(elementId);
             if (element.style.display === "block") {
@@ -467,20 +480,17 @@
             }
         }
 
-        // Hàm tính toán tổng tiền động khi nhập số lượng
         function calculatePrice(inputId, pricePerUnit, totalElementId) {
             const qtyInput = document.getElementById(inputId).value;
             const totalElement = document.getElementById(totalElementId);
-            
             let quantity = parseInt(qtyInput);
-            
-            if (isNaN(quantity) || quantity < 0) {
-                quantity = 0;
-            }
-
+            if (isNaN(quantity) || quantity < 0) quantity = 0;
             const total = quantity * pricePerUnit;
             totalElement.innerText = total.toLocaleString('vi-VN');
         }
+
+        // Khởi tạo
+        updateBalanceUI();
     </script>
 </body>
 </html>
