@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <!-- Cập nhật meta viewport để khóa zoom, chống vỡ giao diện trên mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Faststore</title>
     <style>
@@ -41,237 +40,132 @@
             --balance-bg: rgba(248, 113, 113, 0.15);
         }
 
-        /* ================= SETUP CƠ BẢN ================= */
-        * {
-            box-sizing: border-box; margin: 0; padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent; 
-        }
-
-        /* FIX LỖI CHIỀU CAO TRANG WEB */
-        html {
-            height: 100%;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            padding-bottom: 75px; /* Khoảng trống cho thanh menu dưới */
-            min-height: 100vh; /* Ép trang web luôn dài bằng 100% màn hình để menu không bị lơ lửng */
-            transition: background-color 0.3s, color 0.3s;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        html { height: 100%; }
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 75px; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
 
         /* ================= HEADER ================= */
         header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 20px;
-            background-color: var(--bg-header);
-            border-bottom: 1px solid var(--border-main);
-            position: sticky; top: 0; z-index: 100;
-            transition: background-color 0.3s, border-color 0.3s;
+            display: flex; align-items: center; justify-content: space-between; padding: 15px 20px;
+            background-color: var(--bg-header); border-bottom: 1px solid var(--border-main);
+            position: sticky; top: 0; z-index: 100; transition: background-color 0.3s, border-color 0.3s;
         }
 
         .header-left { display: flex; align-items: center; }
-
-        .menu-icon {
-            cursor: pointer; padding-right: 15px; color: var(--text-main);
-            display: flex; align-items: center; transition: 0.2s;
-        }
-        
+        .menu-icon { cursor: pointer; padding-right: 15px; color: var(--text-main); display: flex; align-items: center; transition: 0.2s; }
         .menu-icon:active svg { transform: scale(0.9); }
-
         .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
 
+        /* Nút Đăng nhập & Ô Số dư trên Header */
+        .btn-header-login {
+            background-color: var(--primary); color: #fff; border: none; padding: 7px 16px;
+            border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .btn-header-login:active { transform: scale(0.95); }
         .balance-box {
             background-color: var(--balance-bg); border: 1px solid var(--balance-bg);
-            padding: 6px 14px; border-radius: 20px; font-size: 14px;
-            font-weight: 700; color: var(--danger); transition: 0.3s;
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700; color: var(--danger);
         }
 
-        /* ================= SIDE MENU (MENU TRƯỢT TRÁI) ================= */
-        .menu-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px);
-            z-index: 1999; display: none; transition: 0.3s;
-        }
-
-        .side-menu {
-            height: 100%; width: 260px; position: fixed; z-index: 2000;
-            top: 0; left: -260px; background-color: var(--bg-card);
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
-            padding-top: 20px;
-        }
-
-        .menu-header-text {
-            font-size: 18px; font-weight: bold; padding: 0 20px 20px 20px;
-            border-bottom: 1px solid var(--border-main); margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
+        /* ================= MENU TRƯỢT TRÁI ================= */
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); z-index: 1999; display: none; transition: 0.3s; }
+        .side-menu { height: 100%; width: 260px; position: fixed; z-index: 2000; top: 0; left: -260px; background-color: var(--bg-card); box-shadow: 4px 0 15px rgba(0,0,0,0.1); transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s; padding-top: 20px; }
+        .menu-header-text { font-size: 18px; font-weight: bold; padding: 0 20px 20px 20px; border-bottom: 1px solid var(--border-main); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .close-btn { font-size: 26px; cursor: pointer; color: var(--text-muted); }
-        
-        .side-menu a {
-            display: flex; align-items: center; gap: 12px; padding: 14px 20px;
-            text-decoration: none; font-size: 15px; font-weight: 600; color: var(--text-muted);
-            cursor: pointer; transition: 0.2s;
-        }
-
+        .side-menu a { display: flex; align-items: center; gap: 12px; padding: 14px 20px; text-decoration: none; font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .side-menu a svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
-        .side-menu a:hover, .side-menu a:active {
-            background-color: var(--bg-content); color: var(--primary); border-right: 3px solid var(--primary);
-        }
+        .side-menu a:hover, .side-menu a:active { background-color: var(--bg-content); color: var(--primary); border-right: 3px solid var(--primary); }
 
-        /* Logic ẩn hiện text Moon/Sun */
-        .sun-icon { display: none; }
-        body.dark-mode .sun-icon { display: block; }
-        body.dark-mode .moon-icon { display: none; }
+        .sun-icon { display: none; } body.dark-mode .sun-icon { display: block; } body.dark-mode .moon-icon { display: none; }
+        .theme-text-dark { display: none; } body.dark-mode .theme-text-dark { display: inline; } body.dark-mode .theme-text-light { display: none; }
         
-        .theme-text-dark { display: none; }
-        body.dark-mode .theme-text-dark { display: inline; }
-        body.dark-mode .theme-text-light { display: none; }
+        #menu-logout { display: none; color: var(--danger); }
 
-        /* ================= CÁC TRANG (SPA ROUTING) ================= */
+        /* ================= SPA CƠ BẢN ================= */
         .page { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
         .page.active { display: block; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ================= AUTHENTICATION (ĐĂNG NHẬP / ĐĂNG KÝ) ================= */
+        .auth-card {
+            background-color: var(--bg-card); border: 1px solid var(--border-main);
+            border-radius: 12px; padding: 25px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-top: 10px; transition: 0.3s;
         }
+        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 2px solid var(--border-main); }
+        .auth-tabs button {
+            flex: 1; background: none; border: none; padding: 12px; font-size: 16px; font-weight: 600;
+            color: var(--text-muted); cursor: pointer; transition: 0.3s; outline: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
+        }
+        .auth-tabs button.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        
+        .auth-form { display: none; }
+        .auth-form.active { display: block; animation: fadeIn 0.3s; }
+        
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper input { padding-right: 45px; } /* Nhường chỗ cho con mắt */
+        .eye-btn {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; padding: 4px; outline: none;
+        }
+        .eye-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        
+        .btn-submit {
+            width: 100%; background-color: var(--primary); color: white; border: none; padding: 14px;
+            font-size: 16px; font-weight: 700; border-radius: 8px; margin-top: 15px; cursor: pointer; transition: 0.2s; outline: none;
+        }
+        .btn-submit:active { transform: scale(0.97); }
 
         /* ================= GIAO DIỆN SẢN PHẨM ================= */
-        .section-box {
-            border: 1px solid var(--border-main); border-radius: 10px; margin-bottom: 20px;
-            overflow: hidden; background-color: var(--bg-card); position: relative;
-            transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-        }
-
-        /* HIỆU ỨNG ÁNH SÁNG VỤT QUA */
-        .section-box::after, .support-card::after {
-            content: ""; position: absolute; top: 0; left: -150%;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, var(--shine-effect) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg); animation: shine 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none; z-index: 10;
-        }
-
+        .section-box { border: 1px solid var(--border-main); border-radius: 10px; margin-bottom: 20px; overflow: hidden; background-color: var(--bg-card); position: relative; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .section-box::after, .support-card::after { content: ""; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, var(--shine-effect) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 4s infinite cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 10; }
         @keyframes shine { 0% { left: -150%; } 20% { left: 200%; } 100% { left: 200%; } }
-
-        .section-header {
-            padding: 16px; font-size: 16px; font-weight: 700; background-color: var(--bg-card);
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .section-content {
-            display: none; padding: 15px; background-color: var(--bg-content);
-            border-top: 1px dashed var(--border-dash); position: relative; z-index: 20;
-        }
-
-        .option-box {
-            border: 1px solid var(--border-main); border-radius: 8px; margin-bottom: 15px;
-            background-color: var(--bg-card); transition: 0.3s;
-        }
-
+        .section-header { padding: 16px; font-size: 16px; font-weight: 700; background-color: var(--bg-card); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .section-content { display: none; padding: 15px; background-color: var(--bg-content); border-top: 1px dashed var(--border-dash); position: relative; z-index: 20; }
+        .option-box { border: 1px solid var(--border-main); border-radius: 8px; margin-bottom: 15px; background-color: var(--bg-card); transition: 0.3s; }
         .option-header { padding: 15px; font-weight: 600; cursor: pointer; color: var(--text-main); }
         .option-body { display: none; padding: 15px; border-top: 1px dashed var(--border-dash); }
 
-        /* ================= INPUT & BUTTON ================= */
+        .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
-        .input-group input {
-            width: 100%; padding: 12px; font-size: 15px; border: 1.5px solid var(--border-dash);
-            border-radius: 6px; outline: none; transition: 0.3s;
-            background-color: var(--bg-card); color: var(--text-main);
-        }
+        .input-group input { width: 100%; padding: 12px; font-size: 15px; border: 1.5px solid var(--border-dash); border-radius: 6px; outline: none; transition: 0.3s; background-color: var(--bg-card); color: var(--text-main); }
         .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+        
         .total-price { font-size: 16px; font-weight: 700; color: var(--danger); margin: 12px 0; }
-
-        .btn-buy {
-            width: 100%; background-color: var(--btn-buy); color: white; border: none; outline: none;
-            padding: 14px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer;
-            transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .btn-buy:hover { background-color: var(--btn-buy-hover); }
+        .btn-buy { width: 100%; background-color: var(--btn-buy); color: white; border: none; outline: none; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-buy:active { transform: scale(0.97); }
 
-        /* ================= TRANG NẠP TIỀN & LỊCH SỬ ================= */
-        .deposit-container {
-            background: var(--bg-card); padding: 30px 20px; border-radius: 12px; text-align: center; 
-            border: 1px solid var(--border-main); transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
+        /* ================= CÁC TRANG PHỤ ================= */
+        .deposit-container { background: var(--bg-card); padding: 30px 20px; border-radius: 12px; text-align: center; border: 1px solid var(--border-main); transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .deposit-container h2 { margin-bottom: 8px; font-size: 20px; color: var(--text-main); }
         .deposit-container p.note { color: var(--danger); font-size: 14px; font-weight: 600; margin-bottom: 20px; }
-        .deposit-container input {
-            width: 100%; padding: 14px; font-size: 18px; border: 2px solid var(--border-main); border-radius: 8px;
-            margin-bottom: 20px; text-align: center; font-weight: 700; outline: none; transition: 0.3s;
-            background-color: var(--bg-card); color: var(--text-main);
-        }
+        .deposit-container input { width: 100%; padding: 14px; font-size: 18px; border: 2px solid var(--border-main); border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 700; outline: none; transition: 0.3s; background-color: var(--bg-card); color: var(--text-main); }
         .qr-container { border: 2px dashed var(--border-dash); border-radius: 12px; padding: 12px; display: inline-block; margin-bottom: 15px; background: #fff; }
         .qr-container img { width: 100%; max-width: 220px; border-radius: 8px; }
 
         .history-list { list-style: none; padding: 0; }
-        .history-item {
-            background: var(--bg-card); border: 1px solid var(--border-main); border-left: 4px solid #10b981; 
-            padding: 16px; border-radius: 8px; margin-bottom: 12px; transition: 0.3s;
-        }
+        .history-item { background: var(--bg-card); border: 1px solid var(--border-main); border-left: 4px solid #10b981; padding: 16px; border-radius: 8px; margin-bottom: 12px; transition: 0.3s; }
         .history-item h4 { margin-bottom: 6px; font-size: 15px; color: var(--text-main); }
         .history-item p { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
         .history-item .price { font-weight: 700; color: var(--danger); margin-top: 4px; }
         .empty-msg { text-align: center; color: var(--text-muted); margin-top: 30px; font-weight: 500; font-size: 15px; }
 
-        /* ================= TRANG HỖ TRỢ ================= */
         .support-title { margin-bottom: 20px; font-size: 20px; color: var(--text-main); text-align: center; }
-        .support-card {
-            display: flex; align-items: center; padding: 16px 20px;
-            background-color: var(--bg-card); border: 1px solid var(--border-main);
-            border-radius: 12px; margin-bottom: 16px; cursor: pointer;
-            text-decoration: none; color: var(--text-main);
-            font-weight: 600; position: relative; overflow: hidden;
-            transition: transform 0.2s, background-color 0.3s;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
+        .support-card { display: flex; align-items: center; padding: 16px 20px; background-color: var(--bg-card); border: 1px solid var(--border-main); border-radius: 12px; margin-bottom: 16px; cursor: pointer; text-decoration: none; color: var(--text-main); font-weight: 600; position: relative; overflow: hidden; transition: transform 0.2s, background-color 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03); }
         .support-card:active { transform: scale(0.97); }
-        .support-card .icon-wrap {
-            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
-            border-radius: 12px; margin-right: 15px; color: #fff;
-        }
+        .support-card .icon-wrap { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-right: 15px; color: #fff; }
         .support-card .icon-wrap svg { width: 24px; height: 24px; }
-        
         .card-zalo .icon-wrap { background: linear-gradient(135deg, #0068ff, #0054cc); }
         .card-fb .icon-wrap { background: linear-gradient(135deg, #1877f2, #145dbf); }
         .card-tele .icon-wrap { background: linear-gradient(135deg, #0088cc, #0077b3); }
 
-        /* ================= THANH ĐIỀU HƯỚNG DƯỚI CÙNG FIX LỖI ================= */
-        .bottom-nav {
-            position: fixed; 
-            bottom: 0; /* Neo chặt đáy */
-            left: 0; 
-            right: 0; /* Ép giãn toàn bộ chiều ngang */
-            width: 100%;
-            background-color: var(--bg-header); 
-            display: flex; 
-            justify-content: space-around;
-            padding: 10px 5px 15px 5px; 
-            border-top: 1px solid var(--border-main);
-            z-index: 9999; /* Luôn nổi lên trên cùng */
-            transition: background-color 0.3s, border-color 0.3s; /* Bỏ transition: all để tránh gây bug render cho position fixed */
-        }
-
-        .nav-item {
-            text-align: center; font-size: 10px; /* Thu nhỏ text một chút để fit 5 icon không đè nhau */
-            color: var(--text-muted); text-decoration: none;
-            flex: 1; cursor: pointer; font-weight: 600;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            transition: color 0.3s;
-        }
-
-        .nav-item svg {
-            width: 22px; height: 22px; fill: none; stroke: currentColor; 
-            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s;
-        }
-
+        /* ================= THANH BOTTOM NAV ================= */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; background-color: var(--bg-header); display: flex; justify-content: space-around; padding: 10px 5px 15px 5px; border-top: 1px solid var(--border-main); z-index: 9999; transition: background-color 0.3s, border-color 0.3s; }
+        .nav-item { text-align: center; font-size: 10px; color: var(--text-muted); text-decoration: none; flex: 1; cursor: pointer; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.3s; }
+        .nav-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s; }
         .nav-item.active { color: var(--primary); }
         .nav-item.active svg { transform: translateY(-2px); }
-
         .maintenance-msg { color: #b45309; text-align: center; padding: 12px; background-color: rgba(253,230,138,0.3); border: 1px solid #fde68a; font-size: 14px; border-radius: 8px;}
     </style>
 </head>
@@ -281,283 +175,352 @@
         <div class="header-left">
             <div class="menu-icon" onclick="toggleMenu()">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </div>
             <div class="logo">Faststore</div>
         </div>
-        <div class="balance-box" id="balanceDisplay">Số dư: 0đ</div>
+        <!-- Vùng hiển thị Auth: Nếu chưa đăng nhập -> Nút đăng nhập. Đăng nhập rồi -> Ô Số dư -->
+        <div id="header-auth-zone">
+            <!-- Render động bằng JS -->
+        </div>
     </header>
 
     <!-- MENU TRƯỢT BÊN TRÁI -->
     <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header-text">
-            <span>Menu Faststore</span>
+            <span id="menuUsername">Menu Faststore</span>
             <span class="close-btn" onclick="toggleMenu()">&times;</span>
         </div>
         
         <a onclick="switchPage('home'); toggleMenu()">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            Trang chủ
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Trang chủ
         </a>
         <a onclick="switchPage('deposit'); toggleMenu()">
-            <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-            Nạp tiền
+            <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Nạp tiền
         </a>
         <a onclick="switchPage('history'); toggleMenu()">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            Lịch sử
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Lịch sử
         </a>
         <a onclick="switchPage('support'); toggleMenu()">
-            <svg viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            Hỗ trợ
+            <svg viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> Hỗ trợ
         </a>
         
-        <!-- Nút Giao diện Menu -->
         <a onclick="toggleTheme(); toggleMenu()">
             <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            <span class="theme-text-light">Giao diện Tối</span>
-            <span class="theme-text-dark">Giao diện Sáng</span>
+            <span class="theme-text-light">Giao diện Tối</span><span class="theme-text-dark">Giao diện Sáng</span>
+        </a>
+
+        <!-- Nút Đăng xuất (chỉ hiện khi đã đăng nhập) -->
+        <a id="menu-logout" onclick="handleLogout()">
+            <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Đăng xuất
         </a>
     </div>
+
+    <!-- TRANG XÁC THỰC (ĐĂNG NHẬP / ĐĂNG KÝ) -->
+    <main id="page-auth" class="page">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button id="tab-login" class="active" onclick="switchAuthMode('login')">Đăng nhập</button>
+                <button id="tab-register" onclick="switchAuthMode('register')">Đăng ký</button>
+            </div>
+
+            <!-- Form Đăng nhập -->
+            <form id="form-login" class="auth-form active" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Tên đăng nhập</label>
+                    <input type="text" id="login-username" name="username" autocomplete="username" placeholder="Nhập tên tài khoản" required>
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required>
+                        <button type="button" class="eye-btn" onclick="togglePass('login-password')">
+                            <!-- Icon Eye Off mặc định -->
+                            <svg class="eye-icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Đăng nhập ngay</button>
+            </form>
+
+            <!-- Form Đăng ký -->
+            <form id="form-register" class="auth-form" onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label>Tên đăng nhập</label>
+                    <input type="text" id="reg-username" name="username" autocomplete="username" placeholder="Tạo tên tài khoản" required>
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="reg-password" name="password" autocomplete="new-password" placeholder="Tạo mật khẩu" required minlength="6">
+                        <button type="button" class="eye-btn" onclick="togglePass('reg-password')">
+                            <svg class="eye-icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Xác nhận lại mật khẩu</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="reg-password-confirm" name="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu" required minlength="6">
+                        <button type="button" class="eye-btn" onclick="togglePass('reg-password-confirm')">
+                            <svg class="eye-icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Đăng ký tài khoản</button>
+            </form>
+        </div>
+    </main>
 
     <!-- TRANG 1: TRANG CHỦ -->
     <main id="page-home" class="page active">
         <div class="section-box">
-            <div class="section-header" onclick="toggleDisplay('sec1-content')">
-                Phần 1: Tool Kéo Ref Spin Dreams
-                <span>&#9660;</span>
-            </div>
+            <div class="section-header" onclick="toggleDisplay('sec1-content')"> Phần 1: Tool Kéo Ref Spin Dreams <span>&#9660;</span> </div>
             <div class="section-content" id="sec1-content">
                 <div class="option-box">
                     <div class="option-header" onclick="toggleDisplay('opt1-content')">Tool AI kéo ref qua màn 2</div>
                     <div class="option-body" id="opt1-content">
-                        <div class="input-group">
-                            <label>Nhập số lượng ref (Giá: 3.000đ / 1 ref):</label>
-                            <input type="number" id="qty1" min="1" placeholder="Ví dụ: 10" oninput="calculatePrice('qty1', 3000, 'total1')">
-                        </div>
+                        <div class="input-group"><label>Nhập số lượng ref (Giá: 3.000đ / 1 ref):</label><input type="number" id="qty1" min="1" placeholder="Ví dụ: 10" oninput="calculatePrice('qty1', 3000, 'total1')"></div>
                         <div class="total-price">Thành tiền: <span id="total1">0</span> VNĐ</div>
                         <button class="btn-buy" onclick="buyService('Tool AI kéo ref qua màn 2', 'qty1', 3000)">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            Mua Ngay
-                      </button>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> Mua Ngay
+                        </button>
                     </div>
                 </div>
 
                 <div class="option-box">
                     <div class="option-header" onclick="toggleDisplay('opt2-content')">Tool AI kéo ref thành viên chỉ nhập mã mời</div>
                     <div class="option-body" id="opt2-content">
-                        <div class="input-group">
-                            <label>Nhập số lượng ref (Giá: 1.200đ / 1 ref):</label>
-                            <input type="number" id="qty2" min="1" placeholder="Ví dụ: 20" oninput="calculatePrice('qty2', 1200, 'total2')">
-                        </div>
+                        <div class="input-group"><label>Nhập số lượng ref (Giá: 1.200đ / 1 ref):</label><input type="number" id="qty2" min="1" placeholder="Ví dụ: 20" oninput="calculatePrice('qty2', 1200, 'total2')"></div>
                         <div class="total-price">Thành tiền: <span id="total2">0</span> VNĐ</div>
                         <button class="btn-buy" onclick="buyService('Tool AI kéo ref nhập mã mời', 'qty2', 1200)">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            Mua Ngay
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> Mua Ngay
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="section-box">
-            <div class="section-header" onclick="toggleDisplay('sec2-content')">
-                Phần 2: Tool Kéo Ref Xworld
-                <span>&#9660;</span>
-            </div>
-            <div class="section-content" id="sec2-content">
-                <div class="maintenance-msg">Hệ thống bảo trì đến ngày 10/9/2026. Xin vui lòng quay lại sau!</div>
-            </div>
+            <div class="section-header" onclick="toggleDisplay('sec2-content')"> Phần 2: Tool Kéo Ref Xworld <span>&#9660;</span> </div>
+            <div class="section-content" id="sec2-content"><div class="maintenance-msg">Hệ thống bảo trì đến ngày 10/9/2026. Xin vui lòng quay lại sau!</div></div>
         </div>
     </main>
 
-    <!-- TRANG 2: NẠP TIỀN -->
+    <!-- TRANG NẠP TIỀN, LỊCH SỬ, HỖ TRỢ ... -->
     <main id="page-deposit" class="page">
         <div class="deposit-container">
-            <h2>Nạp Tiền</h2>
-            <p class="note">Nạp tối thiểu 2.000đ</p>
+            <h2>Nạp Tiền</h2><p class="note">Nạp tối thiểu 2.000đ</p>
             <input type="number" id="depositAmount" min="2000" placeholder="Nhập số tiền..." oninput="updateQR()">
-            <div class="qr-container">
-                <img id="qrImage" src="1000001159.jpg" alt="Mã QR" onerror="this.src='1000001159.jpg';">
-            </div>
-            <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5;">
-                Quét mã QR để thanh toán chính xác số tiền.<br>Tiền duyệt sau 1-3 phút .
-            </p>
+            <div class="qr-container"><img id="qrImage" src="1000001159.jpg" alt="Mã QR" onerror="this.src='1000001159.jpg';"></div>
+            <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5;"> Quét mã QR để thanh toán chính xác số tiền.<br>Admin sẽ duyệt cộng tay cho bạn. </p>
         </div>
     </main>
 
-    <!-- TRANG 3: LỊCH SỬ -->
     <main id="page-history" class="page">
-        <h2 style="margin-bottom: 15px; color: var(--text-main); font-size: 20px;">Lịch sử giao dịch</h2>
+        <h2 style="margin-bottom: 15px; font-size: 20px;">Lịch sử giao dịch</h2>
         <div id="history-container">
-            <div class="empty-msg" id="emptyHistory">
-                <svg style="margin: 0 auto 10px auto; display: block; color: var(--text-muted);" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                Bạn chưa có giao dịch nào
-            </div>
+            <div class="empty-msg" id="emptyHistory"><svg style="margin: 0 auto 10px auto; display: block; color: var(--text-muted);" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Bạn chưa có giao dịch nào</div>
             <ul class="history-list" id="historyList"></ul>
         </div>
     </main>
 
-    <!-- TRANG 4: HỖ TRỢ RIÊNG BIỆT -->
     <main id="page-support" class="page">
         <h2 class="support-title">Liên Hệ Hỗ Trợ</h2>
-        
-        <!-- Thẻ Zalo -->
-        <div class="support-card card-zalo" onclick="window.open('https://zalo.me/0397208110', '_blank')">
-            <div class="icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-            </div>
-            <span>Liên hệ Zalo</span>
-        </div>
-
-        <!-- Thẻ Facebook -->
-        <div class="support-card card-fb" onclick="window.open('https://www.facebook.com/share/1FeEPP1Lem/', '_blank')">
-            <div class="icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-            </div>
-            <span>Liên hệ Facebook</span>
-        </div>
-
-        <!-- Thẻ Telegram -->
-        <div class="support-card card-tele" onclick="window.open('https://t.me/scloneff', '_blank')">
-            <div class="icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            </div>
-            <span>Liên hệ Telegram</span>
-        </div>
+        <div class="support-card card-zalo" onclick="window.open('https://zalo.me/0397208110', '_blank')"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div><span>Liên hệ Zalo</span></div>
+        <div class="support-card card-fb" onclick="window.open('https://www.facebook.com/share/1FeEPP1Lem/', '_blank')"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></div><span>Liên hệ Facebook</span></div>
+        <div class="support-card card-tele" onclick="window.open('https://t.me/scloneff', '_blank')"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></div><span>Liên hệ Telegram</span></div>
     </main>
 
-    <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (5 ICON) -->
+    <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG -->
     <nav class="bottom-nav">
-        <a class="nav-item active" id="nav-home" onclick="switchPage('home')">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            Trang chủ
-        </a>
-        <a class="nav-item" id="nav-deposit" onclick="switchPage('deposit')">
-            <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-            Nạp tiền
-        </a>
-        <a class="nav-item" id="nav-history" onclick="switchPage('history')">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            Lịch sử
-        </a>
-        <a class="nav-item" id="nav-support" onclick="switchPage('support')">
-            <svg viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            Hỗ trợ
-        </a>
-        <a class="nav-item" onclick="toggleTheme()">
-            <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            Giao diện
-        </a>
+        <a class="nav-item active" id="nav-home" onclick="switchPage('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Trang chủ</a>
+        <a class="nav-item" id="nav-deposit" onclick="switchPage('deposit')"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Nạp tiền</a>
+        <a class="nav-item" id="nav-history" onclick="switchPage('history')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Lịch sử</a>
+        <a class="nav-item" id="nav-support" onclick="switchPage('support')"><svg viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Hỗ trợ</a>
+        <a class="nav-item" onclick="toggleTheme()"><svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>Giao diện</a>
     </nav>
 
     <script>
-        // --- QUẢN LÝ CHẾ ĐỘ TỐI (DARK MODE) TỰ ĐỘNG NHỚ ---
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
+        // --- QUẢN LÝ TÀI KHOẢN (MOCK DB BẰNG LOCALSTORAGE) ---
+        let usersDB = JSON.parse(localStorage.getItem('usersDB')) || {};
+        let loggedInUser = localStorage.getItem('loggedInUser'); // Lấy user đang đăng nhập
+        
+        function initAuthState() {
+            const authZone = document.getElementById('header-auth-zone');
+            const menuLogout = document.getElementById('menu-logout');
+            const menuUser = document.getElementById('menuUsername');
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
-        }
-
-        // --- QUẢN LÝ MENU TRƯỢT ---
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('menuOverlay');
-            if (menu.style.left === '0px') {
-                menu.style.left = '-260px'; overlay.style.display = 'none';
+            if (loggedInUser && usersDB[loggedInUser]) {
+                // Nếu đã đăng nhập: Hiện số dư
+                let balance = usersDB[loggedInUser].balance || 0;
+                authZone.innerHTML = `<div class="balance-box">Số dư: ${balance.toLocaleString('vi-VN')}đ</div>`;
+                menuLogout.style.display = 'flex';
+                menuUser.innerText = `Chào, ${loggedInUser}`;
             } else {
-                menu.style.left = '0px'; overlay.style.display = 'block';
+                // Khách lạ: Hiện nút Đăng nhập
+                authZone.innerHTML = `<button class="btn-header-login" onclick="switchPage('auth')">Đăng nhập</button>`;
+                menuLogout.style.display = 'none';
+                menuUser.innerText = `Menu Faststore`;
             }
         }
 
-        let currentBalance = 0;
-        function updateBalanceUI() {
-            document.getElementById('balanceDisplay').innerText = `Số dư: ${currentBalance.toLocaleString('vi-VN')}đ`;
+        // --- ĐĂNG KÝ / ĐĂNG NHẬP ---
+        function switchAuthMode(mode) {
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.remove('active');
+            document.getElementById('form-login').classList.remove('active');
+            document.getElementById('form-register').classList.remove('active');
+
+            document.getElementById(`tab-${mode}`).classList.add('active');
+            document.getElementById(`form-${mode}`).classList.add('active');
         }
 
-        // --- ĐIỀU HƯỚNG TRANG (SPA ROUTING) ---
+        function togglePass(inputId) {
+            const input = document.getElementById(inputId);
+            const svgPath = input.nextElementSibling.querySelector('path');
+            if (input.type === "password") {
+                input.type = "text";
+                // Đổi icon sang Mắt Mở (Eye Open)
+                svgPath.setAttribute("d", "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z");
+            } else {
+                input.type = "password";
+                // Đổi icon về Mắt Nhắm (Eye Off)
+                svgPath.setAttribute("d", "M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22");
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const user = document.getElementById('reg-username').value.trim();
+            const pass = document.getElementById('reg-password').value;
+            const passConfirm = document.getElementById('reg-password-confirm').value;
+
+            if (usersDB[user]) { alert("Tên tài khoản này đã tồn tại!"); return; }
+            if (pass !== passConfirm) { alert("Mật khẩu xác nhận không khớp!"); return; }
+
+            // Khởi tạo user với số dư bằng 0
+            usersDB[user] = { password: pass, balance: 0 };
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+            
+            alert("Đăng ký thành công! Đang tự động đăng nhập...");
+            processLoginSuccess(user);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value;
+
+            if (usersDB[user] && usersDB[user].password === pass) {
+                processLoginSuccess(user);
+            } else {
+                alert("Tên đăng nhập hoặc mật khẩu không đúng!");
+            }
+        }
+
+        function processLoginSuccess(username) {
+            loggedInUser = username;
+            localStorage.setItem('loggedInUser', username);
+            initAuthState();
+            switchPage('home'); // Về trang chủ
+        }
+
+        function handleLogout() {
+            if(confirm("Bạn có chắc muốn đăng xuất?")) {
+                loggedInUser = null;
+                localStorage.removeItem('loggedInUser');
+                initAuthState();
+                toggleMenu(); // Đóng menu lại
+                switchPage('home');
+            }
+        }
+
+        // --- MUA HÀNG (Yêu cầu đăng nhập) ---
+        function buyService(serviceName, inputId, pricePerUnit) {
+            // Kiểm tra: Nếu chưa đăng nhập thì bắt chuyển qua trang Auth
+            if (!loggedInUser) {
+                alert("Vui lòng đăng nhập để mua hàng!");
+                switchPage('auth');
+                return;
+            }
+
+            const qtyInput = document.getElementById(inputId).value;
+            let quantity = parseInt(qtyInput);
+            if (isNaN(quantity) || quantity <= 0) { alert("Vui lòng nhập số lượng hợp lệ!"); return; }
+            let totalCost = quantity * pricePerUnit;
+
+            let currentBalance = usersDB[loggedInUser].balance;
+
+            if (currentBalance >= totalCost) {
+                usersDB[loggedInUser].balance -= totalCost;
+                localStorage.setItem('usersDB', JSON.stringify(usersDB)); // Cập nhật vào DB
+                initAuthState(); // Load lại hiển thị tiền
+                
+                addToHistory(serviceName, quantity, totalCost);
+                alert(`Thanh toán thành công!\nĐã mua ${quantity} ref.`);
+                switchPage('history');
+            } else {
+                alert(`Thanh toán thất bại!\nSố dư không đủ. Bạn cần ${totalCost.toLocaleString('vi-VN')}đ.\nVui lòng nạp thêm tiền.`);
+                switchPage('deposit');
+            }
+        }
+
+        // --- CÁC TÍNH NĂNG KHÁC (UI, DARKMODE) ---
+        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); 
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.style.left === '0px') { menu.style.left = '-260px'; overlay.style.display = 'none'; } 
+            else { menu.style.left = '0px'; overlay.style.display = 'block'; }
+        }
+
         function switchPage(pageName) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-
             document.getElementById(`page-${pageName}`).classList.add('active');
             let navBtn = document.getElementById(`nav-${pageName}`);
             if(navBtn) navBtn.classList.add('active');
             window.scrollTo(0, 0); 
         }
 
-        // --- MUA SẢN PHẨM ---
-        function buyService(serviceName, inputId, pricePerUnit) {
-            const qtyInput = document.getElementById(inputId).value;
-            let quantity = parseInt(qtyInput);
-            if (isNaN(quantity) || quantity <= 0) { alert("Vui lòng nhập số lượng hợp lệ!"); return; }
-            let totalCost = quantity * pricePerUnit;
-
-            if (currentBalance >= totalCost) {
-                currentBalance -= totalCost;
-                updateBalanceUI();
-                addToHistory(serviceName, quantity, totalCost);
-                alert(`Thanh toán thành công!\nĐã mua ${quantity} ref.`);
-                switchPage('history');
-            } else {
-                alert(`Thanh toán thất bại!\nSố dư không đủ. Bạn cần ${totalCost.toLocaleString('vi-VN')}đ.\nVui lòng chuyển qua mục nạp tiền.`);
-            }
+        function toggleDisplay(elementId) {
+            const el = document.getElementById(elementId);
+            el.style.display = (el.style.display === "block") ? "none" : "block";
         }
 
-        // --- LƯU LỊCH SỬ ---
+        function calculatePrice(inputId, pricePerUnit, totalElementId) {
+            let quantity = parseInt(document.getElementById(inputId).value);
+            if (isNaN(quantity) || quantity < 0) quantity = 0;
+            document.getElementById(totalElementId).innerText = (quantity * pricePerUnit).toLocaleString('vi-VN');
+        }
+
         function addToHistory(name, qty, cost) {
             document.getElementById('emptyHistory').style.display = 'none';
             let list = document.getElementById('historyList');
             let now = new Date();
             let timeStr = `${now.getHours()}:${now.getMinutes()} - ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
-
             let li = document.createElement('li');
             li.className = 'history-item';
-            li.innerHTML = `
-                <h4>${name}</h4>
-                <p>Số lượng: <b>${qty}</b> ref</p>
-                <p>Thời gian: ${timeStr}</p>
-                <p class="price">- ${cost.toLocaleString('vi-VN')} đ</p>
-            `;
+            li.innerHTML = `<h4>${name}</h4><p>Số lượng: <b>${qty}</b> ref</p><p>Thời gian: ${timeStr}</p><p class="price">- ${cost.toLocaleString('vi-VN')} đ</p>`;
             list.insertBefore(li, list.firstChild);
         }
 
-        // --- NẠP TIỀN & MÃ QR ---
         function updateQR() {
             const amount = document.getElementById('depositAmount').value;
             const qrImage = document.getElementById('qrImage');
-            if (amount && parseInt(amount) >= 2000) {
-                qrImage.src = `https://img.vietqr.io/image/mbbank-0397208110-compact2.png?amount=${amount}&addInfo=Nap%20tien%20Faststore`;
-            } else {
-                qrImage.src = "1000001159.jpg";
-            }
+            qrImage.src = (amount && parseInt(amount) >= 2000) ? `https://img.vietqr.io/image/mbbank-0397208110-compact2.png?amount=${amount}&addInfo=Nap%20tien%20Faststore` : "1000001159.jpg";
         }
 
-        // --- UI ---
-        function toggleDisplay(elementId) {
-            const element = document.getElementById(elementId);
-            element.style.display = (element.style.display === "block") ? "none" : "block";
-        }
-
-        function calculatePrice(inputId, pricePerUnit, totalElementId) {
-            const qtyInput = document.getElementById(inputId).value;
-            const totalElement = document.getElementById(totalElementId);
-            let quantity = parseInt(qtyInput);
-            if (isNaN(quantity) || quantity < 0) quantity = 0;
-            totalElement.innerText = (quantity * pricePerUnit).toLocaleString('vi-VN');
-        }
-
-        updateBalanceUI();
+        // Khởi động load thông tin Auth
+        initAuthState();
     </script>
 </body>
 </html>
