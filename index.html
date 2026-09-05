@@ -142,6 +142,17 @@
             margin-top: 10px;
         }
 
+        /* Thông báo bảo trì */
+        .maintenance-msg {
+            color: #d32f2f;
+            font-weight: 500;
+            text-align: center;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            border: 1px solid #ffcdd2;
+        }
+
         /* Footer Credit */
         footer {
             text-align: center;
@@ -155,11 +166,13 @@
 <body>
 
     <header>
+        <!-- Nút menu 3 chấm (dọc) -->
         <div class="menu-icon" onclick="alert('Mở menu')">&#8942;</div>
         <div class="logo">Faststore</div>
     </header>
 
     <main>
+        <!-- Phần 1: Tool Kéo Ref Spin Dreams -->
         <div class="section-box">
             <div class="section-header" onclick="toggleDisplay('sec1-content')">
                 Phần 1: Tool Kéo Ref Spin Dreams
@@ -167,6 +180,7 @@
             </div>
             <div class="section-content" id="sec1-content">
                 
+                <!-- Ô 1 -->
                 <div class="option-box">
                     <div class="option-header" onclick="toggleDisplay('opt1-content')">
                         Tool AI kéo ref qua màn 2
@@ -180,6 +194,7 @@
                     </div>
                 </div>
 
+                <!-- Ô 2 -->
                 <div class="option-box">
                     <div class="option-header" onclick="toggleDisplay('opt2-content')">
                         Tool AI kéo ref thành viên chỉ nhập mã mời không làm gì thêm
@@ -196,17 +211,19 @@
             </div>
         </div>
 
+        <!-- Phần 2: Tool Kéo Ref Xworld -->
         <div class="section-box">
-            <div class="section-header">
-                Phần 2
+            <div class="section-header" onclick="toggleDisplay('sec2-content')">
+                Phần 2: Tool Kéo Ref Xworld
+                <span>&#9660;</span>
+            </div>
+            <div class="section-content" id="sec2-content">
+                <div class="maintenance-msg">
+                    Hệ thống bảo trì đến ngày 10/9/2026. Xin vui lòng quay lại sau!
+                </div>
             </div>
         </div>
 
-        <div class="section-box">
-            <div class="section-header">
-                Phần 3
-            </div>
-        </div>
     </main>
 
     <footer>
