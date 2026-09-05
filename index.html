@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #ffffff; /* Giao diện trắng */
+            background-color: #ffffff;
             color: #333;
         }
 
@@ -21,12 +21,18 @@
         header {
             display: flex;
             align-items: center;
+            justify-content: space-between; /* Đẩy nội dung ra 2 bên */
             padding: 15px 20px;
             background-color: #fff;
             border-bottom: 1px solid #eaeaea;
             position: sticky;
             top: 0;
             z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
         }
 
         .menu-icon {
@@ -43,6 +49,133 @@
             color: #000;
         }
 
+        /* Ô tiền bên phải */
+        .balance-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        /* Side Menu */
+        .menu-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 199;
+            display: none;
+        }
+
+        .side-menu {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 200;
+            top: 0; left: -250px;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            padding-top: 60px;
+        }
+
+        .side-menu a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #333;
+            display: block;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .side-menu a:hover {
+            background-color: #f9f9f9;
+            color: #007bff;
+        }
+
+        .side-menu .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 28px;
+            border-bottom: none;
+            padding: 0;
+        }
+
+        /* Modal Nạp tiền */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 300;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 25px 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .modal-content p.note {
+            color: #d32f2f;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+            text-align: center;
+        }
+        
+        .modal-content input:focus {
+            border-color: #007bff;
+        }
+
+        .qr-container {
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        .qr-container img {
+            width: 100%;
+            max-width: 220px;
+            border-radius: 5px;
+        }
+
         /* Main Content */
         main {
             padding: 20px;
@@ -56,6 +189,26 @@
             margin-bottom: 15px;
             overflow: hidden;
             background-color: #f9f9f9;
+            position: relative; /* Hỗ trợ hiệu ứng ánh sáng */
+        }
+
+        /* HIỆU ỨNG ÁNH SÁNG VỤT QUA */
+        .section-box::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -150%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite; /* 4s lặp lại 1 lần */
+            pointer-events: none; /* Không chặn click chuột vào nội dung dưới */
+            z-index: 10;
+        }
+
+        @keyframes shine {
+            0% { left: -150%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
         }
 
         .section-header {
@@ -78,6 +231,8 @@
             padding: 15px;
             background-color: #fcfcfc;
             border-top: 1px solid #eee;
+            position: relative;
+            z-index: 20; /* Nằm trên hiệu ứng ánh sáng nếu mở nội dung */
         }
 
         /* Options inside Section 1 */
@@ -166,10 +321,41 @@
 <body>
 
     <header>
-        <!-- Nút menu 3 chấm (dọc) -->
-        <div class="menu-icon" onclick="alert('Mở menu')">&#8942;</div>
-        <div class="logo">Faststore</div>
+        <div class="header-left">
+            <!-- Nút menu 3 gạch ngang -->
+            <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <div class="logo">Faststore</div>
+        </div>
+        <!-- Ô tiền bên phải -->
+        <div class="balance-box">Số dư: 0đ</div>
     </header>
+
+    <!-- Side Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+    <!-- Side Menu -->
+    <div class="side-menu" id="sideMenu">
+        <a class="close-btn" onclick="toggleMenu()">&times;</a>
+        <!-- Mục 1: Nạp tiền -->
+        <a onclick="openDepositModal()">💰 Nạp tiền</a>
+        <!-- Mục 2: Liên hệ admin -->
+        <a href="https://zalo.me/0397208110" target="_blank">📞 Liên hệ admin</a>
+    </div>
+
+    <!-- Modal Nạp Tiền -->
+    <div class="modal-overlay" id="depositModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeDepositModal()">&times;</span>
+            <h2>Nạp Tiền</h2>
+            <p class="note">Nạp tối thiểu 2.000đ</p>
+            <input type="number" id="depositAmount" min="2000" placeholder="Nhập số tiền muốn nạp..." oninput="updateQR()">
+            <div class="qr-container">
+                <!-- Mã QR mặc định lấy từ file của bạn -->
+                <img id="qrImage" src="1000001159.jpg" alt="QR Nạp Tiền">
+            </div>
+            <p style="font-size: 12px; color: #888; margin-top: 10px;">Quét mã QR để thanh toán tự động.</p>
+        </div>
+    </div>
 
     <main>
         <!-- Phần 1: Tool Kéo Ref Spin Dreams -->
@@ -231,6 +417,46 @@
     </footer>
 
     <script>
+        // Mở / Đóng Menu
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.style.left === '0px') {
+                menu.style.left = '-250px';
+                overlay.style.display = 'none';
+            } else {
+                menu.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+
+        // Mở Modal Nạp Tiền
+        function openDepositModal() {
+            toggleMenu(); // Đóng menu lại khi mở modal lên
+            document.getElementById('depositModal').style.display = 'flex';
+        }
+
+        // Đóng Modal Nạp Tiền
+        function closeDepositModal() {
+            document.getElementById('depositModal').style.display = 'none';
+        }
+
+        // Cập nhật QR tự động theo số tiền
+        function updateQR() {
+            const amount = document.getElementById('depositAmount').value;
+            const qrImage = document.getElementById('qrImage');
+            
+            // Nếu người dùng nhập từ 2k trở lên thì tạo QR API Động
+            if (amount && parseInt(amount) >= 2000) {
+                // Đang cấu hình ngân hàng MBBank, số TK: 0397208110 theo số Zalo của bạn.
+                // Nếu khác bạn có thể thay "mbbank" thành mã ngân hàng khác, và "0397208110" thành STK của bạn
+                qrImage.src = `https://img.vietqr.io/image/mbbank-0397208110-compact2.png?amount=${amount}&addInfo=Nap%20tien%20Faststore`;
+            } else {
+                // Nếu xóa hoặc chưa đủ tiền thì dùng ảnh mặc định ban đầu
+                qrImage.src = "1000001159.jpg";
+            }
+        }
+
         // Hàm dùng để đóng/mở nội dung các phần
         function toggleDisplay(elementId) {
             const element = document.getElementById(elementId);
@@ -248,14 +474,11 @@
             
             let quantity = parseInt(qtyInput);
             
-            // Nếu người dùng xóa hết hoặc nhập số âm
             if (isNaN(quantity) || quantity < 0) {
                 quantity = 0;
             }
 
             const total = quantity * pricePerUnit;
-            
-            // Định dạng tiền tệ có dấu chấm (VD: 3.000)
             totalElement.innerText = total.toLocaleString('vi-VN');
         }
     </script>
