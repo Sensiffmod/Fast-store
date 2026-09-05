@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faststore</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff; /* Giao diện trắng */
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            padding-right: 15px;
+            color: #555;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .section-header {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header:hover {
+            background-color: #f0f0f0;
+        }
+
+        .section-content {
+            display: none;
+            padding: 15px;
+            background-color: #fcfcfc;
+            border-top: 1px solid #eee;
+        }
+
+        /* Options inside Section 1 */
+        .option-box {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        .option-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-header {
+            padding: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+
+        .option-header:hover {
+            background-color: #f5f5f5;
+        }
+
+        .option-body {
+            display: none;
+            padding: 15px;
+            border-top: 1px dashed #ccc;
+            background-color: #fafafa;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #007bff;
+        }
+
+        .total-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin-top: 10px;
+        }
+
+        /* Footer Credit */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="menu-icon" onclick="alert('Mở menu')">&#8942;</div>
+        <div class="logo">Faststore</div>
+    </header>
+
+    <main>
+        <div class="section-box">
+            <div class="section-header" onclick="toggleDisplay('sec1-content')">
+                Phần 1: Tool Kéo Ref Spin Dreams
+                <span>&#9660;</span>
+            </div>
+            <div class="section-content" id="sec1-content">
+                
+                <div class="option-box">
+                    <div class="option-header" onclick="toggleDisplay('opt1-content')">
+                        Tool AI kéo ref qua màn 2
+                    </div>
+                    <div class="option-body" id="opt1-content">
+                        <div class="input-group">
+                            <label>Nhập số lượng ref muốn kéo (Giá: 3.000đ / 1 ref):</label>
+                            <input type="number" id="qty1" min="1" placeholder="Ví dụ: 10" oninput="calculatePrice('qty1', 3000, 'total1')">
+                        </div>
+                        <div class="total-price">Thành tiền: <span id="total1">0</span> VNĐ</div>
+                    </div>
+                </div>
+
+                <div class="option-box">
+                    <div class="option-header" onclick="toggleDisplay('opt2-content')">
+                        Tool AI kéo ref thành viên chỉ nhập mã mời không làm gì thêm
+                    </div>
+                    <div class="option-body" id="opt2-content">
+                        <div class="input-group">
+                            <label>Nhập số lượng ref muốn kéo (Giá: 1.200đ / 1 ref):</label>
+                            <input type="number" id="qty2" min="1" placeholder="Ví dụ: 20" oninput="calculatePrice('qty2', 1200, 'total2')">
+                        </div>
+                        <div class="total-price">Thành tiền: <span id="total2">0</span> VNĐ</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header">
+                Phần 2
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-header">
+                Phần 3
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Faststore. Dev by sensiob53.
+    </footer>
+
+    <script>
+        // Hàm dùng để đóng/mở nội dung các phần
+        function toggleDisplay(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === "block") {
+                element.style.display = "none";
+            } else {
+                element.style.display = "block";
+            }
+        }
+
+        // Hàm tính toán tổng tiền động khi nhập số lượng
+        function calculatePrice(inputId, pricePerUnit, totalElementId) {
+            const qtyInput = document.getElementById(inputId).value;
+            const totalElement = document.getElementById(totalElementId);
+            
+            let quantity = parseInt(qtyInput);
+            
+            // Nếu người dùng xóa hết hoặc nhập số âm
+            if (isNaN(quantity) || quantity < 0) {
+                quantity = 0;
+            }
+
+            const total = quantity * pricePerUnit;
+            
+            // Định dạng tiền tệ có dấu chấm (VD: 3.000)
+            totalElement.innerText = total.toLocaleString('vi-VN');
+        }
+    </script>
+</body>
+</html>
+ 
