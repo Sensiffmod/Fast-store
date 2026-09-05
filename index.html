@@ -3,17 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giao Diện Nạp Tiền Faststore</title>
+    <title>Faststore</title>
     <style>
-        /* CSS Cơ Bản & Reset */
-        :root {
-            --primary-color: #2196F3;
-            --background-color: #ffffff;
-            --text-color: #333333;
-            --border-color: #e0e0e0;
-            --menu-bg: #f5f5f5;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -22,588 +13,252 @@
         }
 
         body {
-            background-color: #f0f0f0; /* Màu nền ngoài khung app */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #ffffff; /* Giao diện trắng */
+            color: #333;
         }
 
-        /* Khung App (Mô phỏng điện thoại) */
-        .phone-container {
-            width: 375px;
-            height: 812px;
-            background-color: var(--background-color);
-            border: 12px solid #333;
-            border-radius: 40px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            overflow: hidden;
-            position: relative;
+        /* Header */
+        header {
             display: flex;
-            flex-direction: column;
-        }
-
-        /* Thanh Trạng Thái (Status Bar) */
-        .status-bar {
-            height: 44px;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 15px 20px;
             background-color: #fff;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .status-bar-icons {
-            display: flex;
-            gap: 5px;
-        }
-
-        /* Thanh Tiêu Đề (Header) */
-        header.app-header {
-            height: 56px;
-            padding: 0 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            background-color: #fff;
-        }
-
-        .menu-toggle {
+        .menu-icon {
             font-size: 24px;
             cursor: pointer;
-            color: var(--primary-color);
+            user-select: none;
+            padding-right: 15px;
+            color: #555;
         }
 
-        .app-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .balance-display {
-            font-size: 14px;
-            background-color: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 15px;
-        }
-
-        /* Nội Dung Chính (Main Content) */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        /* Màn Hình 1: Chọn Số Tiền */
-        .recharge-screen, .qr-screen, .home-screen {
-            display: none; /* Ẩn mặc định */
-        }
-
-        .recharge-screen.active, .qr-screen.active, .home-screen.active {
-            display: block;
-        }
-
-        .recharge-header {
-            margin-bottom: 20px;
-        }
-
-        .recharge-title {
+        .logo {
             font-size: 20px;
             font-weight: bold;
+            color: #000;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
             margin-bottom: 15px;
+            overflow: hidden;
+            background-color: #f9f9f9;
         }
 
-        .tab-bar {
-            display: flex;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .tab-item {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            cursor: pointer;
-            font-weight: 500;
-            color: #666;
-        }
-
-        .tab-item.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .amount-section-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .speed-tag {
-            font-size: 12px;
-            color: #4CAF50;
-            background-color: #e8f5e9;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .amount-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .amount-btn {
-            background-color: #fff;
-            border: 1px solid var(--border-color);
+        .section-header {
             padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .amount-btn:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            background-color: #e3f2fd;
-        }
-
-        .custom-amount-group {
-            margin-bottom: 30px;
-        }
-
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        .custom-amount-input {
-            width: 100%;
-            padding: 12px 12px 12px 35px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .min-amount-text {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #2196F3, #047edf);
-            color: white;
-            border: none;
-            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
+            background-color: #fff;
             cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* Màn Hình 2: QR Thanh Toán */
-        .qr-screen {
-            text-align: center;
-        }
-
-        .qr-header-text {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .waiting-text {
-            color: #fbc02d;
-            font-weight: 500;
-            margin-bottom: 20px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
         }
 
-        .qr-image-wrapper {
-            display: inline-block;
-            padding: 10px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 20px;
+        .section-header:hover {
+            background-color: #f0f0f0;
         }
 
-        .main-qr-image {
-            width: 200px;
-            height: 200px;
-            display: block;
-        }
-
-        .payment-details {
-            text-align: left;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+        .section-content {
+            display: none;
             padding: 15px;
+            background-color: #fcfcfc;
+            border-top: 1px solid #eee;
+        }
+
+        /* Options inside Section 1 */
+        .option-box {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        .option-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-header {
+            padding: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+
+        .option-header:hover {
+            background-color: #f5f5f5;
+        }
+
+        .option-body {
+            display: none;
+            padding: 15px;
+            border-top: 1px dashed #ccc;
             background-color: #fafafa;
         }
 
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
+        .input-group {
             margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
             font-size: 14px;
+            margin-bottom: 8px;
+            color: #555;
         }
 
-        .detail-label {
-            color: #666;
-            font-weight: 500;
+        .input-group input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            outline: none;
         }
 
-        .detail-value {
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .input-group input:focus {
+            border-color: #007bff;
         }
 
-        .copy-icon {
-            color: var(--primary-color);
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* Thanh Điều Hướng Dưới (Bottom Nav) */
-        .bottom-nav {
-            height: 65px;
-            border-top: 1px solid var(--border-color);
-            background-color: #2c3e50; /* Giữ màu sẫm của gốc */
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: 10px; /* Cho notch của iPhone */
-        }
-
-        .nav-item {
-            color: #bdc3c7;
-            text-align: center;
-            font-size: 11px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .nav-item.active {
-            color: var(--primary-color);
-        }
-
-        .nav-icon {
-            font-size: 20px;
-        }
-
-        /* Menu Bên (Sidebar) */
-        .sidebar-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 99;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar {
-            position: absolute;
-            top: 0;
-            left: -280px; /* Ẩn bên trái */
-            width: 280px;
-            height: 100%;
-            background-color: var(--background-color);
-            z-index: 100;
-            transition: left 0.3s;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            border-right: 1px solid var(--border-color);
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-overlay.open {
-            display: block;
-            opacity: 1;
-        }
-
-        .sidebar-header {
+        .total-price {
             font-size: 16px;
             font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: #d32f2f;
+            margin-top: 10px;
         }
 
-        .close-sidebar {
-            cursor: pointer;
-            font-size: 20px;
-            color: #888;
-        }
-
-        .menu-list {
-            list-style: none;
-            flex: 1;
-        }
-
-        .menu-item {
-            padding: 15px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-color);
+        /* Thông báo bảo trì */
+        .maintenance-msg {
+            color: #d32f2f;
             font-weight: 500;
-        }
-
-        .menu-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        .menu-icon-sidebar {
-            color: var(--primary-color);
-            width: 20px;
             text-align: center;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            border: 1px solid #ffcdd2;
         }
 
-        .zalo-contact {
-            margin-top: auto;
-            border-top: 1px solid var(--border-color);
-            padding-top: 20px;
+        /* Footer Credit */
+        footer {
             text-align: center;
-        }
-
-        .zalo-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #0084FF;
-            color: white;
-            text-decoration: none;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        /* SVG Icons (Simplified for no external files) */
-        .icon {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            stroke-width: 0;
-            stroke: currentColor;
-            fill: currentColor;
+            padding: 20px;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
-<div class="phone-container">
-    <div class="status-bar">
-        <span>11:56</span>
-        <div class="status-bar-icons">
-            <span>&#128225;</span> <span>&#128263;</span> <span>&#128267;</span> </div>
-    </div>
-
-    <header class="app-header">
-        <div class="menu-toggle" id="menuToggle">&#9776;</div>
-        <div class="app-title">Faststore</div>
-        <div class="balance-display">SỐ DƯ: 0đ</div>
+    <header>
+        <!-- Nút menu 3 chấm (dọc) -->
+        <div class="menu-icon" onclick="alert('Mở menu')">&#8942;</div>
+        <div class="logo">Faststore</div>
     </header>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            Danh Mục
-            <span class="close-sidebar" id="closeSidebar">&times;</span>
-        </div>
-        <ul class="menu-list">
-            <li class="menu-item" onclick="showScreen('recharge')">
-                <span class="menu-icon-sidebar">&#128181;</span> Nạp Tiền
-            </li>
-            <li class="menu-item" onclick="alert('Tính năng đang phát triển!')">
-                <span class="menu-icon-sidebar">&#128101;</span> Tài Khoản
-            </li>
-            <li class="menu-item" onclick="alert('Tính năng đang phát triển!')">
-                <span class="menu-icon-sidebar">&#128203;</span> Lịch Sử
-            </li>
-        </ul>
-        <div class="zalo-contact">
-            <a href="https://zalo.me/0397208110" target="_blank" class="zalo-btn">Liên Hệ Admin Zalo</a>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="home-screen active" id="homeScreen">
-            <h2>Chào mừng đến với Faststore!</h2>
-            <p style="margin-top: 10px; color: #666;">Chọn "Nạp Tiền" từ menu để bắt đầu.</p>
-        </div>
-
-        <div class="recharge-screen" id="rechargeScreen">
-            <div class="recharge-title">NẠP TIỀN TÀI KHOẢN</div>
-            <div class="tab-bar">
-                <div class="tab-item active">Nạp QR Ngân Hàng</div>
-                <div class="tab-item">Nạp thẻ cào</div>
+    <main>
+        <!-- Phần 1: Tool Kéo Ref Spin Dreams -->
+        <div class="section-box">
+            <div class="section-header" onclick="toggleDisplay('sec1-content')">
+                Phần 1: Tool Kéo Ref Spin Dreams
+                <span>&#9660;</span>
             </div>
-
-            <div class="amount-section-title">
-                Chọn số tiền nạp
-                <span class="speed-tag">Siêu tốc ~5s</span>
-            </div>
-            <div class="amount-grid">
-                <div class="amount-btn" onclick="setAmount('10.000')">10.000đ</div>
-                <div class="amount-btn" onclick="setAmount('20.000')">20.000đ</div>
-                <div class="amount-btn" onclick="setAmount('50.000')">50.000đ</div>
-                <div class="amount-btn" onclick="setAmount('100.000')">100.000đ</div>
-                <div class="amount-btn" onclick="setAmount('200.000')">200.000đ</div>
-                <div class="amount-btn" onclick="setAmount('500.000')">500.000đ</div>
-            </div>
-
-            <div class="custom-amount-group">
-                <div class="input-wrapper">
-                    <span class="input-icon">&#9998;</span> <input type="text" class="custom-amount-input" id="customAmount" placeholder="Nhập số tiền tùy ý">
+            <div class="section-content" id="sec1-content">
+                
+                <!-- Ô 1 -->
+                <div class="option-box">
+                    <div class="option-header" onclick="toggleDisplay('opt1-content')">
+                        Tool AI kéo ref qua màn 2
+                    </div>
+                    <div class="option-body" id="opt1-content">
+                        <div class="input-group">
+                            <label>Nhập số lượng ref muốn kéo (Giá: 3.000đ / 1 ref):</label>
+                            <input type="number" id="qty1" min="1" placeholder="Ví dụ: 10" oninput="calculatePrice('qty1', 3000, 'total1')">
+                        </div>
+                        <div class="total-price">Thành tiền: <span id="total1">0</span> VNĐ</div>
+                    </div>
                 </div>
-                <div class="min-amount-text">VND Tối thiểu 10.000đ</div>
-            </div>
 
-            <button class="submit-btn" onclick="goToQrScreen()">NẠP TIỀN NGAY</button>
+                <!-- Ô 2 -->
+                <div class="option-box">
+                    <div class="option-header" onclick="toggleDisplay('opt2-content')">
+                        Tool AI kéo ref thành viên chỉ nhập mã mời không làm gì thêm
+                    </div>
+                    <div class="option-body" id="opt2-content">
+                        <div class="input-group">
+                            <label>Nhập số lượng ref muốn kéo (Giá: 1.200đ / 1 ref):</label>
+                            <input type="number" id="qty2" min="1" placeholder="Ví dụ: 20" oninput="calculatePrice('qty2', 1200, 'total2')">
+                        </div>
+                        <div class="total-price">Thành tiền: <span id="total2">0</span> VNĐ</div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-        <div class="qr-screen" id="qrScreen">
-            <div class="qr-header-text">Thông tin thanh toán</div>
-            <div class="waiting-text">&#128337; Đang chờ thanh toán...</div> <div class="qr-image-wrapper">
-                <img src="image_2.png" alt="Mã QR Thanh Toán" class="main-qr-image">
+        <!-- Phần 2: Tool Kéo Ref Xworld -->
+        <div class="section-box">
+            <div class="section-header" onclick="toggleDisplay('sec2-content')">
+                Phần 2: Tool Kéo Ref Xworld
+                <span>&#9660;</span>
             </div>
-
-            <div class="payment-details">
-                <div class="detail-row">
-                    <span class="detail-label">Ngân hàng</span>
-                    <span class="detail-value">ACB</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Số tài khoản</span>
-                    <span class="detail-value">123456789 <span class="copy-icon">&#128203;</span></span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Tên tài khoản</span>
-                    <span class="detail-value">NGUYỄN VĂN A</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Số tiền</span>
-                    <span class="detail-value" id="finalAmountDisplay">10.000 VNĐ</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Nội dung</span>
-                    <span class="detail-value">ND12345 <span class="copy-icon">&#128203;</span></span>
+            <div class="section-content" id="sec2-content">
+                <div class="maintenance-msg">
+                    Hệ thống bảo trì đến ngày 10/9/2026. Xin vui lòng quay lại sau!
                 </div>
             </div>
         </div>
-    </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" onclick="showScreen('home')">
-            <span class="nav-icon">&#8962;</span> Trang chủ
-        </div>
-        <div class="nav-item">
-            <span class="nav-icon">&#128101;</span> Thuê Clone
-        </div>
-        <div class="nav-item" onclick="showScreen('recharge')">
-            <span class="nav-icon">&#128181;</span> Nạp Tiền
-        </div>
-        <div class="nav-item">
-            <span class="nav-icon">&#128343;</span> Lịch Sử
-        </div>
-    </nav>
-</div>
+    </main>
 
-<script>
-    // Các phần tử DOM
-    const menuToggle = document.getElementById('menuToggle');
-    const closeSidebar = document.getElementById('closeSidebar');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const customAmountInput = document.getElementById('customAmount');
-    const finalAmountDisplay = document.getElementById('finalAmountDisplay');
-    const screens = {
-        home: document.getElementById('homeScreen'),
-        recharge: document.getElementById('rechargeScreen'),
-        qr: document.getElementById('qrScreen')
-    };
+    <footer>
+        &copy; 2026 Faststore. Dev by sensiob53.
+    </footer>
 
-    // Quản lý Menu Bên
-    function toggleSidebar() {
-        sidebar.classList.toggle('open');
-        sidebarOverlay.classList.toggle('open');
-    }
-
-    menuToggle.addEventListener('click', toggleSidebar);
-    closeSidebar.addEventListener('click', toggleSidebar);
-    sidebarOverlay.addEventListener('click', toggleSidebar);
-
-    // Quản lý Màn Hình
-    function showScreen(screenName) {
-        // Ẩn tất cả các màn hình
-        Object.values(screens).forEach(screen => screen.classList.remove('active'));
-        // Hiển thị màn hình được chọn
-        screens[screenName].classList.add('active');
-        // Đóng menu nếu đang mở
-        if (sidebar.classList.contains('open')) {
-            toggleSidebar();
+    <script>
+        // Hàm dùng để đóng/mở nội dung các phần
+        function toggleDisplay(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === "block") {
+                element.style.display = "none";
+            } else {
+                element.style.display = "block";
+            }
         }
-    }
 
-    // Xử lý Số Tiền Nạp
-    function setAmount(amount) {
-        customAmountInput.value = amount;
-    }
+        // Hàm tính toán tổng tiền động khi nhập số lượng
+        function calculatePrice(inputId, pricePerUnit, totalElementId) {
+            const qtyInput = document.getElementById(inputId).value;
+            const totalElement = document.getElementById(totalElementId);
+            
+            let quantity = parseInt(qtyInput);
+            
+            // Nếu người dùng xóa hết hoặc nhập số âm
+            if (isNaN(quantity) || quantity < 0) {
+                quantity = 0;
+            }
 
-    function goToQrScreen() {
-        let amountStr = customAmountInput.value;
-        if (!amountStr || amountStr.trim() === '') {
-            alert('Vui lòng nhập số tiền!');
-            return;
+            const total = quantity * pricePerUnit;
+            
+            // Định dạng tiền tệ có dấu chấm (VD: 3.000)
+            totalElement.innerText = total.toLocaleString('vi-VN');
         }
-        
-        // Cập nhật số tiền hiển thị trên màn hình QR
-        finalAmountDisplay.innerText = amountStr + " VNĐ";
-        
-        // Chuyển sang màn hình QR
-        showScreen('qr');
-    }
-</script>
-
+    </script>
 </body>
 </html>
  
